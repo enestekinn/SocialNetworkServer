@@ -1,13 +1,12 @@
-package com.enestekin.controller.user
+package com.enestekin.repository
 
 import com.enestekin.data.models.User
 import org.litote.kmongo.coroutine.CoroutineDatabase
-import org.litote.kmongo.coroutine.insertOne
 import org.litote.kmongo.eq
 
-class UserControllerImpl(
+class UserRepositoryImpl(
    db: CoroutineDatabase
-) : UserController {
+) : UserRepository {
 
     private val users = db.getCollection<User>()
 

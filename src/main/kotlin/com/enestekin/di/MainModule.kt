@@ -1,7 +1,7 @@
 package com.enestekin.di
 
-import com.enestekin.controller.user.UserController
-import com.enestekin.controller.user.UserControllerImpl
+import com.enestekin.repository.UserRepository
+import com.enestekin.repository.UserRepositoryImpl
 import com.enestekin.util.Constants
 import org.koin.dsl.module
 import org.litote.kmongo.coroutine.coroutine
@@ -19,9 +19,9 @@ val mainModule = module {
 
     }
 
-    single<UserController> {
+    single<UserRepository> {
 
-       UserControllerImpl(get())
+       UserRepositoryImpl(get())
     }
 
 

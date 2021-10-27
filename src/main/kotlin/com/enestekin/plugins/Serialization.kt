@@ -11,7 +11,6 @@ fun Application.configureSerialization() {
     install(ContentNegotiation) {
         gson {
 
-
             }
     }
 

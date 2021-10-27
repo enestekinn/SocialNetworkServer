@@ -1,6 +1,6 @@
 package com.enestekin.routes
 
-import com.enestekin.controller.user.UserController
+import com.enestekin.repository.UserRepository
 import com.enestekin.data.models.User
 import com.enestekin.data.requests.CreateAccountRequest
 import com.enestekin.data.responses.BasicApiResponse
@@ -13,9 +13,9 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import org.koin.ktor.ext.inject
 
-fun Route.userRoutes() {
+fun Route.createUserRoute(userRepository: UserRepository) {
 
-    val userController: UserController by inject()
+
 
     route("/api/user/create") {
 
@@ -29,7 +29,7 @@ fun Route.userRoutes() {
                 return@post
             }
             println("${request.email}  ${request.username}")
-            val userExists = userController.getUserByEmail(request.email) != null
+            val userExists = userRepository.getUserByEmail(request.email) != null
             if(userExists) {
                 call.respond(
                     BasicApiResponse(
@@ -48,7 +48,7 @@ fun Route.userRoutes() {
                 )
                 return@post
             }
-            userController.createUser(
+            userRepository.createUser(
                 User(
                     email = request.email,
                     username = request.username,

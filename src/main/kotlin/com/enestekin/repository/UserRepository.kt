@@ -1,8 +1,8 @@
-package com.enestekin.controller.user
+package com.enestekin.repository
 
 import com.enestekin.data.models.User
 
-interface UserController {
+interface UserRepository {
 
     suspend fun createUser(user: User)
 

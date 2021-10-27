@@ -11,10 +11,10 @@ data class User(
     val password: String,
     val profileImageUrl: String,
     val bio: String,
-    val skills: List<String> = listOf(), // empty list by default
     val gitHubUrl: String?,
     val instagramUrl: String?,
     val linkedInUrl: String?,
+    val skills: List<String> = listOf(), // empty list by default
     @BsonId
     val id: String = ObjectId().toString(),
 

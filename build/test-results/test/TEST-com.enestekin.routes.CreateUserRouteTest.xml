@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.enestekin.routes.CreateUserRouteTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-10-27T11:07:44" hostname="Eness-MacBook-Pro.local" time="0.831">
+  <properties/>
+  <testcase name="Create user , email is empty, responds with unsuccessful" classname="com.enestekin.routes.CreateUserRouteTest" time="0.831"/>
+  <system-out><![CDATA[2021-10-27 14:07:44.917 [Test worker @coroutine#1] INFO  ktor.test - Autoreload is disabled because the development mode is off.
+2021-10-27 14:07:44.934 [Test worker @coroutine#1] INFO  ktor.test - Application started in 0.063 seconds.
+  
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
