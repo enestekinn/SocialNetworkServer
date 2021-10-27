@@ -1,17 +1,17 @@
 package com.enestekin.routes
 
-import com.enestekin.repository.UserRepository
+import com.enestekin.data.repository.UserRepository
 import com.enestekin.data.models.User
 import com.enestekin.data.requests.CreateAccountRequest
 import com.enestekin.data.responses.BasicApiResponse
 import com.enestekin.util.ApiResponseMessages.FIELDS_BLANK
+import com.enestekin.util.ApiResponseMessages.INVALID_CREDENTIALS
 import com.enestekin.util.ApiResponseMessages.USER_ALREADY_EXISTS
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
-import org.koin.ktor.ext.inject
 
 fun Route.createUserRoute(userRepository: UserRepository) {
 
@@ -64,6 +64,55 @@ fun Route.createUserRoute(userRepository: UserRepository) {
             call.respond(
                 BasicApiResponse(successful = true)
             )
+        }
+    }
+}
+
+fun Route.loginUser(userRepository: UserRepository) {
+
+
+    //post("/api/user/login"){ }
+
+    route("/api/user/login") {
+
+
+        post {
+
+            val request = call.receiveOrNull<CreateAccountRequest>() ?: kotlin.run {
+                call.respond(HttpStatusCode.BadRequest)
+                return@post
+            }
+
+            if (request.email.isBlank() && request.username.isBlank()){
+                call.respond(HttpStatusCode.BadRequest)
+                return@post
+            }
+
+
+
+         val isCorrectPassword = userRepository.doesPasswordForUserMatch(
+             email = request.email,
+             enteredPassword =  request.password
+         )
+
+            if (isCorrectPassword){
+                call.respond(
+                    HttpStatusCode.OK,
+                    BasicApiResponse(
+                        successful = true
+                    )
+                )
+            }else {
+                call.respond(
+                    HttpStatusCode.OK,
+                    BasicApiResponse(
+                        successful = false,
+                        message = INVALID_CREDENTIALS
+                    )
+                )
+            }
+
+
         }
     }
 }

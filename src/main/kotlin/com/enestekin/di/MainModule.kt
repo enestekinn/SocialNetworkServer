@@ -1,7 +1,7 @@
 package com.enestekin.di
 
-import com.enestekin.repository.UserRepository
-import com.enestekin.repository.UserRepositoryImpl
+import com.enestekin.data.repository.UserRepository
+import com.enestekin.data.repository.UserRepositoryImpl
 import com.enestekin.util.Constants
 import org.koin.dsl.module
 import org.litote.kmongo.coroutine.coroutine

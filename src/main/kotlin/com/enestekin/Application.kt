@@ -15,15 +15,15 @@ fun main(args: Array<String>): Unit =
 @Suppress("unused")
 fun Application.module() {
 
+    install(Koin) {
+        modules(mainModule)
+    }
     configureSecurity()
     configureRouting()
     configureHTTP()
     configureMonitoring()
     configureSerialization()
 
-    install(Koin) {
-        modules(mainModule)
-    }
 }
 
 

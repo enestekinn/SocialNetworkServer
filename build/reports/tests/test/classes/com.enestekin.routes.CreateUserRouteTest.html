@@ -23,7 +23,7 @@
 <tr>
 <td>
 <div class="infoBox" id="tests">
-<div class="counter">1</div>
+<div class="counter">4</div>
 <p>tests</p>
 </div>
 </td>
@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.831s</div>
+<div class="counter">1.036s</div>
 <p>duration</p>
 </div>
 </td>
@@ -79,7 +79,22 @@
 </thead>
 <tr>
 <td class="success">Create user , email is empty, responds with unsuccessful</td>
-<td class="success">0.831s</td>
+<td class="success">0.080s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">Create user , no body attached, responds with BadRequest</td>
+<td class="success">0.908s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">Create user , user already exists, responds with unsuccessful</td>
+<td class="success">0.039s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">Create user , valid data, responds with successful</td>
+<td class="success">0.009s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -87,9 +102,54 @@
 <div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>2021-10-27 14:07:44.917 [Test worker @coroutine#1] INFO  ktor.test - Autoreload is disabled because the development mode is off.
-2021-10-27 14:07:44.934 [Test worker @coroutine#1] INFO  ktor.test - Application started in 0.063 seconds.
+<pre>2021-10-27 15:02:34.328 [Test worker] INFO  ktor.test - Autoreload is disabled because the development mode is off.
+2021-10-27 15:02:34.344 [Test worker] INFO  ktor.test - Application started in 0.093 seconds.
+2021-10-27 15:02:34.795 [DefaultDispatcher-worker-1 @request#1] DEBUG ktor.test - Conversion failed, null returned
+io.ktor.features.CannotTransformContentToTypeException: Cannot transform this request's content to com.enestekin.data.requests.AccountAuthRequest
+	at io.ktor.request.ApplicationReceiveFunctionsKt.receive(ApplicationReceiveFunctions.kt:121)
+	at io.ktor.request.ApplicationReceiveFunctionsKt.receiveOrNull(ApplicationReceiveFunctions.kt:135)
+	at com.enestekin.routes.UserRoutesKt$createUserRoute$1$1.invokeSuspend(UserRoutes.kt:97)
+	at com.enestekin.routes.UserRoutesKt$createUserRoute$1$1.invoke(UserRoutes.kt)
+	at com.enestekin.routes.UserRoutesKt$createUserRoute$1$1.invoke(UserRoutes.kt)
+	at io.ktor.util.pipeline.SuspendFunctionGun.loop(SuspendFunctionGun.kt:248)
+	at io.ktor.util.pipeline.SuspendFunctionGun.proceed(SuspendFunctionGun.kt:116)
+	at io.ktor.util.pipeline.SuspendFunctionGun.execute(SuspendFunctionGun.kt:136)
+	at io.ktor.util.pipeline.Pipeline.execute(Pipeline.kt:78)
+	at io.ktor.routing.Routing.executeResult(Routing.kt:155)
+	at io.ktor.routing.Routing.interceptor(Routing.kt:39)
+	at io.ktor.routing.Routing$Feature$install$1.invokeSuspend(Routing.kt:107)
+	at io.ktor.routing.Routing$Feature$install$1.invoke(Routing.kt)
+	at io.ktor.routing.Routing$Feature$install$1.invoke(Routing.kt)
+	at io.ktor.util.pipeline.SuspendFunctionGun.loop(SuspendFunctionGun.kt:248)
+	at io.ktor.util.pipeline.SuspendFunctionGun.proceed(SuspendFunctionGun.kt:116)
+	at io.ktor.util.pipeline.SuspendFunctionGun.execute(SuspendFunctionGun.kt:136)
+	at io.ktor.util.pipeline.Pipeline.execute(Pipeline.kt:78)
+	at io.ktor.server.testing.TestApplicationEngine$callInterceptor$1.invokeSuspend(TestApplicationEngine.kt:296)
+	at io.ktor.server.testing.TestApplicationEngine$callInterceptor$1.invoke(TestApplicationEngine.kt)
+	at io.ktor.server.testing.TestApplicationEngine$callInterceptor$1.invoke(TestApplicationEngine.kt)
+	at io.ktor.server.testing.TestApplicationEngine$2.invokeSuspend(TestApplicationEngine.kt:50)
+	at io.ktor.server.testing.TestApplicationEngine$2.invoke(TestApplicationEngine.kt)
+	at io.ktor.server.testing.TestApplicationEngine$2.invoke(TestApplicationEngine.kt)
+	at io.ktor.util.pipeline.SuspendFunctionGun.loop(SuspendFunctionGun.kt:248)
+	at io.ktor.util.pipeline.SuspendFunctionGun.proceed(SuspendFunctionGun.kt:116)
+	at io.ktor.util.pipeline.SuspendFunctionGun.execute(SuspendFunctionGun.kt:136)
+	at io.ktor.util.pipeline.Pipeline.execute(Pipeline.kt:78)
+	at io.ktor.server.testing.TestApplicationEngine$handleRequest$pipelineJob$1.invokeSuspend(TestApplicationEngine.kt:295)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:106)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:571)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:750)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:678)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:665)
+2021-10-27 15:02:34.859 [Test worker @coroutine#3] INFO  ktor.test - Autoreload is disabled because the development mode is off.
+2021-10-27 15:02:34.860 [Test worker @coroutine#3] INFO  ktor.test - Application started in 0.001 seconds.
   
+2021-10-27 15:02:34.968 [Test worker @coroutine#8] INFO  ktor.test - Autoreload is disabled because the development mode is off.
+2021-10-27 15:02:34.968 [Test worker @coroutine#8] INFO  ktor.test - Application started in 0.001 seconds.
+test@test.com  asd
+2021-10-27 15:02:34.977 [Test worker] INFO  ktor.test - Autoreload is disabled because the development mode is off.
+2021-10-27 15:02:34.978 [Test worker] INFO  ktor.test - Application started in 0.001 seconds.
+test@test.com  test
 </pre>
 </span>
 </div>
@@ -101,7 +161,7 @@
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 7.1</a> at Oct 27, 2021 2:07:45 PM</p>
+<a href="http://www.gradle.org">Gradle 7.1</a> at Oct 27, 2021 3:02:35 PM</p>
 </div>
 </div>
 </body>

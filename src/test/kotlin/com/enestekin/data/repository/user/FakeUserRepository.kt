@@ -1,6 +1,6 @@
-package com.enestekin.repository.user
+package com.enestekin.data.repository.user
 
-import com.enestekin.repository.UserRepository
+import com.enestekin.data.repository.UserRepository
 import com.enestekin.data.models.User
 
 class FakeUserRepository: UserRepository {
@@ -17,5 +17,10 @@ class FakeUserRepository: UserRepository {
 
     override suspend fun getUserByEmail(email: String): User? {
         return users.find { it.email == email }
+    }
+
+    override suspend fun doesPasswordForUserMatch(email: String, enteredPassword: String): Boolean {
+        val user = getUserByEmail(email)
+        return user?.password == enteredPassword
     }
 }

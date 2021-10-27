@@ -1,3 +1,48 @@
-Å2021-10-27 14:07:44.917 [Test worker @coroutine#1] INFO  ktor.test - Autoreload is disabled because the development mode is off.
-k2021-10-27 14:07:44.934 [Test worker @coroutine#1] INFO  ktor.test - Application started in 0.063 seconds.
-  
+t2021-10-27 15:02:34.328 [Test worker] INFO  ktor.test - Autoreload is disabled because the development mode is off.
+^2021-10-27 15:02:34.344 [Test worker] INFO  ktor.test - Application started in 0.093 seconds.
+s2021-10-27 15:02:34.795 [DefaultDispatcher-worker-1 @request#1] DEBUG ktor.test - Conversion failed, null returned
+íio.ktor.features.CannotTransformContentToTypeException: Cannot transform this request's content to com.enestekin.data.requests.AccountAuthRequest
+^	at io.ktor.request.ApplicationReceiveFunctionsKt.receive(ApplicationReceiveFunctions.kt:121)
+d	at io.ktor.request.ApplicationReceiveFunctionsKt.receiveOrNull(ApplicationReceiveFunctions.kt:135)
+Z	at com.enestekin.routes.UserRoutesKt$createUserRoute$1$1.invokeSuspend(UserRoutes.kt:97)
+P	at com.enestekin.routes.UserRoutesKt$createUserRoute$1$1.invoke(UserRoutes.kt)
+P	at com.enestekin.routes.UserRoutesKt$createUserRoute$1$1.invoke(UserRoutes.kt)
+M	at io.ktor.util.pipeline.SuspendFunctionGun.loop(SuspendFunctionGun.kt:248)
+P	at io.ktor.util.pipeline.SuspendFunctionGun.proceed(SuspendFunctionGun.kt:116)
+P	at io.ktor.util.pipeline.SuspendFunctionGun.execute(SuspendFunctionGun.kt:136)
+;	at io.ktor.util.pipeline.Pipeline.execute(Pipeline.kt:78)
+:	at io.ktor.routing.Routing.executeResult(Routing.kt:155)
+7	at io.ktor.routing.Routing.interceptor(Routing.kt:39)
+L	at io.ktor.routing.Routing$Feature$install$1.invokeSuspend(Routing.kt:107)
+A	at io.ktor.routing.Routing$Feature$install$1.invoke(Routing.kt)
+A	at io.ktor.routing.Routing$Feature$install$1.invoke(Routing.kt)
+M	at io.ktor.util.pipeline.SuspendFunctionGun.loop(SuspendFunctionGun.kt:248)
+P	at io.ktor.util.pipeline.SuspendFunctionGun.proceed(SuspendFunctionGun.kt:116)
+P	at io.ktor.util.pipeline.SuspendFunctionGun.execute(SuspendFunctionGun.kt:136)
+;	at io.ktor.util.pipeline.Pipeline.execute(Pipeline.kt:78)
+o	at io.ktor.server.testing.TestApplicationEngine$callInterceptor$1.invokeSuspend(TestApplicationEngine.kt:296)
+d	at io.ktor.server.testing.TestApplicationEngine$callInterceptor$1.invoke(TestApplicationEngine.kt)
+d	at io.ktor.server.testing.TestApplicationEngine$callInterceptor$1.invoke(TestApplicationEngine.kt)
+^	at io.ktor.server.testing.TestApplicationEngine$2.invokeSuspend(TestApplicationEngine.kt:50)
+T	at io.ktor.server.testing.TestApplicationEngine$2.invoke(TestApplicationEngine.kt)
+T	at io.ktor.server.testing.TestApplicationEngine$2.invoke(TestApplicationEngine.kt)
+M	at io.ktor.util.pipeline.SuspendFunctionGun.loop(SuspendFunctionGun.kt:248)
+P	at io.ktor.util.pipeline.SuspendFunctionGun.proceed(SuspendFunctionGun.kt:116)
+P	at io.ktor.util.pipeline.SuspendFunctionGun.execute(SuspendFunctionGun.kt:136)
+;	at io.ktor.util.pipeline.Pipeline.execute(Pipeline.kt:78)
+y	at io.ktor.server.testing.TestApplicationEngine$handleRequest$pipelineJob$1.invokeSuspend(TestApplicationEngine.kt:295)
+[	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+A	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:106)
+Z	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:571)
+c	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:750)
+a	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:678)
+[	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:665)
+Å2021-10-27 15:02:34.859 [Test worker @coroutine#3] INFO  ktor.test - Autoreload is disabled because the development mode is off.
+k2021-10-27 15:02:34.860 [Test worker @coroutine#3] INFO  ktor.test - Application started in 0.001 seconds.
+  
+Å2021-10-27 15:02:34.968 [Test worker @coroutine#8] INFO  ktor.test - Autoreload is disabled because the development mode is off.
+k2021-10-27 15:02:34.968 [Test worker @coroutine#8] INFO  ktor.test - Application started in 0.001 seconds.
+test@test.com  asd
+t2021-10-27 15:02:34.977 [Test worker] INFO  ktor.test - Autoreload is disabled because the development mode is off.
+^2021-10-27 15:02:34.978 [Test worker] INFO  ktor.test - Application started in 0.001 seconds.
+test@test.com  test

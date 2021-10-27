@@ -5,7 +5,7 @@ import com.enestekin.data.requests.CreateAccountRequest
 import com.enestekin.data.responses.BasicApiResponse
 import com.enestekin.di.testModule
 import com.enestekin.plugins.configureSerialization
-import com.enestekin.repository.user.FakeUserRepository
+import com.enestekin.data.repository.user.FakeUserRepository
 import com.enestekin.util.ApiResponseMessages
 import com.google.common.truth.Truth.assertThat
 import com.google.gson.Gson
@@ -16,8 +16,10 @@ import io.ktor.routing.*
 import io.ktor.server.testing.*
 import kotlinx.coroutines.runBlocking
 import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
 import org.koin.test.KoinTest
 import org.koin.test.inject
+import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 
@@ -36,6 +38,11 @@ internal class CreateUserRouteTest : KoinTest {
         startKoin {
             modules(testModule)
         }
+    }
+
+    @AfterTest
+    fun tearDown(){
+        stopKoin()
     }
 
     @Test

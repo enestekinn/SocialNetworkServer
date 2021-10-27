@@ -1,4 +1,4 @@
-package com.enestekin.repository
+package com.enestekin.data.repository
 
 import com.enestekin.data.models.User
 import org.litote.kmongo.coroutine.CoroutineDatabase
@@ -20,6 +20,11 @@ class UserRepositoryImpl(
 
     override suspend fun getUserByEmail(email: String): User? {
         return users.findOne(User::email eq  email) //eq equal
+    }
+
+    override suspend fun doesPasswordForUserMatch(email: String, enteredPassword: String): Boolean {
+        val user = getUserByEmail(email)
+        return user?.password == enteredPassword
     }
 
 }
