@@ -1,6 +1,5 @@
 package com.enestekin.data.repository.user
 
-import com.enestekin.data.repository.UserRepository
 import com.enestekin.data.models.User
 
 class FakeUserRepository: UserRepository {
