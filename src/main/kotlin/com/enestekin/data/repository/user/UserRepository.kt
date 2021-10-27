@@ -1,4 +1,4 @@
-package com.enestekin.data.repository
+package com.enestekin.data.repository.user
 
 import com.enestekin.data.models.User
 

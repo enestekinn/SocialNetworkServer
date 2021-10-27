@@ -1,6 +1,6 @@
 package com.enestekin.routes
 
-import com.enestekin.data.repository.UserRepository
+import com.enestekin.data.repository.user.UserRepository
 import com.enestekin.data.models.User
 import com.enestekin.data.requests.CreateAccountRequest
 import com.enestekin.data.responses.BasicApiResponse
