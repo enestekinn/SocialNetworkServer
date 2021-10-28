@@ -3,6 +3,7 @@ package com.enestekin.routes
 import com.enestekin.data.repository.follow.FollowRepository
 import com.enestekin.data.requests.FollowUpdateRequest
 import com.enestekin.data.responses.BasicApiResponse
+import com.enestekin.service.FollowService
 import com.enestekin.util.ApiResponseMessages.USER_NOT_FOUND
 import io.ktor.application.*
 import io.ktor.http.*
@@ -10,7 +11,7 @@ import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 
-fun Route.followUser(followRepository: FollowRepository) {
+fun Route.followUser(followService: FollowService) {
 
 
 
@@ -23,11 +24,7 @@ post("/api/following/follow"){
     }
 
 
-    val didUserExist = followRepository.followUserIfExists(
-        request.followingUserId,
-        request.followedUserId
-    )
-
+    val didUserExist =  followService.followUserIfExists(request)
     if (didUserExist){
         call.respond(
             HttpStatusCode.OK,
@@ -51,7 +48,7 @@ post("/api/following/follow"){
 
 }
 
-fun Route.unfollowUser(followRepository: FollowRepository){
+fun Route.unfollowUser(followService: FollowService){
     delete("/api/following/unfollow"){
 
         val request = call.receiveOrNull<FollowUpdateRequest>() ?: kotlin.run {
@@ -60,11 +57,7 @@ fun Route.unfollowUser(followRepository: FollowRepository){
 
         }
 
-      val didUserExist =   followRepository.unfollowUserIfExists(
-            request.followingUserId,
-            request.followedUserId
-        )
-        println("${request.followedUserId} $$$$$$ ${request.followingUserId}")
+      val didUserExist =followService.unfollowUserIfExists(request)
         if (didUserExist){
             call.respond(
                 HttpStatusCode.OK,

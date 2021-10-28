@@ -1,7 +1,6 @@
 package com.enestekin.routes
 
-import com.enestekin.data.models.Post
-import com.enestekin.data.repository.post.PostRepository
+
 import com.enestekin.data.requests.CreatePostRequest
 import com.enestekin.data.responses.BasicApiResponse
 import com.enestekin.util.ApiResponseMessages
@@ -11,7 +10,7 @@ import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 
-fun Route.createPostRoute(postRepository: PostRepository){
+fun Route.createPostRoute(postService: PostService){
     post("/api/post/create"){
         val request = call.receiveOrNull<CreatePostRequest>() ?: kotlin.run {
             call.respond(HttpStatusCode.BadRequest)
@@ -20,14 +19,8 @@ fun Route.createPostRoute(postRepository: PostRepository){
         }
 
 
-        val didUserExist = postRepository.createPostIfUserExists(
-            Post(
-                imageUrl = "",
-                userId = request.userId,
-                timestamp = System.currentTimeMillis(),
-                description = request.description
-            )
-        )
+        val didUserExist = postService.createPostIfUserExists(request)
+
         if (!didUserExist){
             call.respond(
                 HttpStatusCode.OK,
