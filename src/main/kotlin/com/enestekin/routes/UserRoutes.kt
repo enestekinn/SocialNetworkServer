@@ -1,9 +1,12 @@
 package com.enestekin.routes
 
+import com.auth0.jwt.JWT
+import com.auth0.jwt.algorithms.Algorithm
 import com.enestekin.data.repository.user.UserRepository
 import com.enestekin.data.models.User
 import com.enestekin.data.requests.CreateAccountRequest
 import com.enestekin.data.requests.LoginRequest
+import com.enestekin.data.responses.AuthResponse
 import com.enestekin.data.responses.BasicApiResponse
 import com.enestekin.service.UserService
 import com.enestekin.util.ApiResponseMessages.FIELDS_BLANK
@@ -14,6 +17,8 @@ import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import java.util.*
+import kotlin.math.exp
 
 fun Route.createUserRoute(userService: UserService) {
 
@@ -62,7 +67,12 @@ fun Route.createUserRoute(userService: UserService) {
     }
 }
 
-fun Route.loginUser(userRepository: UserRepository) {
+fun Route.loginUser(
+    userService: UserService,
+    jwtIssuer: String,
+    jwtAudience: String,
+    jwtSecret: String
+) {
 
 
     //post("/api/user/login"){ }
@@ -84,17 +94,20 @@ fun Route.loginUser(userRepository: UserRepository) {
 
 
 
-         val isCorrectPassword = userRepository.doesPasswordForUserMatch(
-             email = request.email,
-             enteredPassword =  request.password
-         )
+         val isCorrectPassword = userService.doesPasswordMatchForUser(request)
 
             if (isCorrectPassword){
+                // when user is logged  in , produce token  and attached it to respond
+                val expiresIn = 1000L * 60L * 60L * 24L * 365L // one year
+                val token = JWT.create()
+                    .withClaim("email",request.email)
+                    .withIssuer(jwtIssuer)
+                    .withExpiresAt(Date(System.currentTimeMillis() + expiresIn)) // token expires in a year
+                    .withAudience(jwtAudience)
+                    .sign(Algorithm.HMAC256(jwtSecret))
                 call.respond(
                     HttpStatusCode.OK,
-                    BasicApiResponse(
-                        successful = true
-                    )
+                  AuthResponse(token = token)
                 )
             }else {
                 call.respond(

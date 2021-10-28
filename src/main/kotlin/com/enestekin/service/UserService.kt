@@ -3,7 +3,7 @@ package com.enestekin.service
 import com.enestekin.data.models.User
 import com.enestekin.data.repository.user.UserRepository
 import com.enestekin.data.requests.CreateAccountRequest
-
+import com.enestekin.data.requests.LoginRequest
 
 
 // this class is basically like viewmodel
@@ -13,6 +13,17 @@ class UserService(
 
 suspend fun doesUserWithEmailExist(email: String): Boolean {
         return repository.getUserByEmail(email) != null
+    }
+
+    suspend fun doesEmailBelongToUserId(email: String, userId: String): Boolean{
+        return repository.doesEmailBelongToUserId(email,userId)
+    }
+
+    suspend fun doesPasswordMatchForUser(request: LoginRequest):Boolean{
+        return repository.doesPasswordForUserMatch(
+            email = request.email,
+            enteredPassword =  request.password
+        )
     }
 
 
