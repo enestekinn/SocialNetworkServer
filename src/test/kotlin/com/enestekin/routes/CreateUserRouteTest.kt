@@ -53,7 +53,7 @@ internal class CreateUserRouteTest : KoinTest {
         withTestApplication(
             moduleFunction = {
                 install(Routing){
-                    createUserRoute(userRepository)
+                    createUser(userRepository)
                 }
             }
         ){
@@ -84,7 +84,7 @@ val user = User(
                 configureSerialization()
 
                 install(Routing){
-                    createUserRoute(userRepository)
+                    createUser(userRepository)
                 }
             }
         ){
@@ -121,7 +121,7 @@ val user = User(
                 configureSerialization()
 
                 install(Routing){
-                    createUserRoute(userRepository)
+                    createUser(userRepository)
                 }
             }
         ){
@@ -158,7 +158,7 @@ val user = User(
                 configureSerialization()
 
                 install(Routing){
-                    createUserRoute(userRepository)
+                    createUser(userRepository)
                 }
             }
         ){

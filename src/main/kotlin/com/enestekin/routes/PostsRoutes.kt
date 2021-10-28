@@ -2,8 +2,10 @@ package com.enestekin.routes
 
 
 import com.enestekin.data.requests.CreatePostRequest
+import com.enestekin.data.requests.DeletePostRequest
 import com.enestekin.data.responses.BasicApiResponse
 import com.enestekin.plugins.email
+import com.enestekin.service.LikeService
 import com.enestekin.service.UserService
 import com.enestekin.util.ApiResponseMessages
 import com.enestekin.util.Constants
@@ -16,7 +18,7 @@ import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 
-fun Route.createPostRoute(
+fun Route.createPost(
     postService: PostService,
     userService: UserService
 ){
@@ -106,4 +108,36 @@ fun Route.getPostsForFollows(
 
        }
    }
+}
+
+fun Route.deletePost(
+    postService: PostService,
+    userService: UserService,
+    likeService: LikeService
+){
+
+    delete ("/api/post/delete") {
+        val request = call.receiveOrNull<DeletePostRequest>() ?: kotlin.run {
+            call.respond(HttpStatusCode.BadRequest)
+            return@delete
+
+        }
+
+        val post = postService.getPost(request.postId)
+        if (post == null) {
+            call.respond(
+                HttpStatusCode.NotFound
+            )
+            return@delete
+        }
+        ifEmailBelongsToUser(
+            userId = post.userId,
+            validateEmail = userService::doesEmailBelongToUserId
+        ) {
+            postService.deletePost(request.postId)
+            likeService.deleteLikesForParent(request.postId)
+            // TODO: 28.10.2021 Delete comments from post
+            call.respond(HttpStatusCode.OK)
+        }
+    }
 }

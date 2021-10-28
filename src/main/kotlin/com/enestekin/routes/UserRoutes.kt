@@ -20,7 +20,7 @@ import io.ktor.routing.*
 import java.util.*
 import kotlin.math.exp
 
-fun Route.createUserRoute(userService: UserService) {
+fun Route.createUser(userService: UserService) {
 
 
 

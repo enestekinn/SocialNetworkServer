@@ -1,14 +1,11 @@
 package com.enestekin.plugins
 
-import com.enestekin.data.repository.follow.FollowRepository
-import com.enestekin.data.repository.post.PostRepository
-import com.enestekin.data.repository.user.UserRepository
 import com.enestekin.routes.*
 import com.enestekin.service.FollowService
+import com.enestekin.service.LikeService
 import com.enestekin.service.UserService
 import io.ktor.routing.*
 import io.ktor.application.*
-import io.ktor.auth.*
 import org.koin.ktor.ext.inject
 
 
@@ -20,6 +17,8 @@ fun Application.configureRouting() {
 
     val postService: PostService by inject()
 
+    val likeService: LikeService by inject()
+
 
 
     val jwtIssuer = environment.config.property("jwt.domain").getString()
@@ -29,7 +28,7 @@ fun Application.configureRouting() {
     routing {
 
         // User routes
-        createUserRoute(userService)
+        createUser(userService)
         loginUser(
             userService = userService,
             jwtIssuer = jwtIssuer,
@@ -42,8 +41,13 @@ fun Application.configureRouting() {
         unfollowUser(followService)
 
         // Post routes
-        createPostRoute(postService,userService)
+        createPost(postService,userService)
         getPostsForFollows(postService, userService)
+        deletePost(postService,userService)
+
+        // Like routes
+        likeParent(likeService,userService)
+        unlikeParent(likeService, userService)
 
 
     }
