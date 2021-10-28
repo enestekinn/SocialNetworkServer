@@ -3,6 +3,7 @@ package com.enestekin.routes
 import com.enestekin.data.repository.user.UserRepository
 import com.enestekin.data.models.User
 import com.enestekin.data.requests.CreateAccountRequest
+import com.enestekin.data.requests.LoginRequest
 import com.enestekin.data.responses.BasicApiResponse
 import com.enestekin.util.ApiResponseMessages.FIELDS_BLANK
 import com.enestekin.util.ApiResponseMessages.INVALID_CREDENTIALS
@@ -78,12 +79,12 @@ fun Route.loginUser(userRepository: UserRepository) {
 
         post {
 
-            val request = call.receiveOrNull<CreateAccountRequest>() ?: kotlin.run {
+            val request = call.receiveOrNull<LoginRequest>() ?: kotlin.run {
                 call.respond(HttpStatusCode.BadRequest)
                 return@post
             }
 
-            if (request.email.isBlank() && request.username.isBlank()){
+            if (request.email.isBlank() && request.password.isBlank()){
                 call.respond(HttpStatusCode.BadRequest)
                 return@post
             }

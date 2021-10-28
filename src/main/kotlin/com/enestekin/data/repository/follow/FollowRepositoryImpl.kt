@@ -39,7 +39,7 @@ class FollowRepositoryImpl(
 
         val deleteResult = following.deleteOne(
             and(
-                Following::followingUserId eq followingUserId,
+                Following::followedUserId eq followingUserId,
                 Following::followedUserId eq followedUserId,
             )
         )

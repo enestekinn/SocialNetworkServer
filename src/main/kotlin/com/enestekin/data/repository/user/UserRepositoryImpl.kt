@@ -19,7 +19,7 @@ class UserRepositoryImpl(
     }
 
     override suspend fun getUserByEmail(email: String): User? {
-        return users.findOne(User::email eq  email) //eq equal
+        return users.findOne(User::email eq email) //eq equal
     }
 
     override suspend fun doesPasswordForUserMatch(email: String, enteredPassword: String): Boolean {
