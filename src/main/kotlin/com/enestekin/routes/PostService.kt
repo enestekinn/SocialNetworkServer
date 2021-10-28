@@ -3,6 +3,7 @@ package com.enestekin.routes
 import com.enestekin.data.models.Post
 import com.enestekin.data.repository.post.PostRepository
 import com.enestekin.data.requests.CreatePostRequest
+import com.enestekin.util.Constants
 
 class PostService (
     private val repository: PostRepository
@@ -19,4 +20,11 @@ class PostService (
         )
     }
 
+    suspend fun getPostsForFollows(
+        userId: String,
+        page: Int = 0,
+        pageSize: Int = Constants.DEFAULT_POST_PAGE_SIZE
+    ): List<Post> {
+        return repository.getPostsByFollows(userId, page, pageSize)
+    }
 }

@@ -3,8 +3,11 @@ package com.enestekin.routes
 
 import com.enestekin.data.requests.CreatePostRequest
 import com.enestekin.data.responses.BasicApiResponse
+import com.enestekin.plugins.email
 import com.enestekin.service.UserService
 import com.enestekin.util.ApiResponseMessages
+import com.enestekin.util.Constants
+import com.enestekin.util.QueryParams
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.auth.jwt.*
@@ -30,41 +33,77 @@ when we attached a claim  which is email.user logs in . email saves in token.
  which user can't modifier.here we get that email from token
  *
  **/
-            val email = call.principal<JWTPrincipal>()?.getClaim("email",String::class)
-            val isEmailByUser =userService.doesEmailBelongToUserId(
-                email =  email ?: "",
-                userId = request.userId
-            )
 
-            if (!isEmailByUser){
-                call.respond(HttpStatusCode.Unauthorized,"You are not who you say you are.")
-                return@post
-            }
+                // same *
+//            val email = call.principal<JWTPrincipal>()?.getClaim("email",String::class)
+//            val isEmailByUser =userService.doesEmailBelongToUserId(
+//                email =  email ?: "",
+//                userId = request.userId
+//            )
+//
+//            if (!isEmailByUser){
+//                call.respond(HttpStatusCode.Unauthorized,"You are not who you say you are.")
+//                return@post
+//            }
 
+                // same *
+            ifEmailBelongsToUser(
+                userId = request.userId,
+                validateEmail = userService::doesEmailBelongToUserId
+            ){
+                val didUserExist = postService.createPostIfUserExists(request)
 
-            val didUserExist = postService.createPostIfUserExists(request)
-
-            if (!didUserExist){
-                call.respond(
-                    HttpStatusCode.OK,
-                    BasicApiResponse(
-                        successful = false,
-                        message = ApiResponseMessages.USER_NOT_FOUND
+                if (!didUserExist){
+                    call.respond(
+                        HttpStatusCode.OK,
+                        BasicApiResponse(
+                            successful = false,
+                            message = ApiResponseMessages.USER_NOT_FOUND
+                        )
                     )
-                )
-            }else {
-                call.respond(
-                    HttpStatusCode.OK,
-                    BasicApiResponse(
-                        successful = true,
+                }else {
+                    call.respond(
+                        HttpStatusCode.OK,
+                        BasicApiResponse(
+                            successful = true,
+                        )
                     )
-                )
+                }
             }
-
 
         }
     }
 
+}
+fun Route.getPostsForFollows(
+    postService: PostService,
+    userService: UserService
+){
+   authenticate {
+       get {
+           val userId = call.parameters[QueryParams.PARAM_USER_ID] ?: kotlin.run {
+               call.respond(HttpStatusCode.BadRequest)
+               return@get
+           }
+           val page = call.parameters[QueryParams.PARAM_PAGE]?.toIntOrNull() ?: 0
+           val pageSize = call.parameters[QueryParams.PARAM_PAGE_SIZE]?.toIntOrNull() ?:
+           Constants.DEFAULT_POST_PAGE_SIZE
 
 
+
+//ifEmailBelongsToUser  is basically validating  email shorter.
+           ifEmailBelongsToUser(
+               userId = userId,
+               validateEmail = userService::doesEmailBelongToUserId
+           ){
+
+               val posts = postService.getPostsForFollows(userId,page,pageSize)
+               call.respond(
+                   HttpStatusCode.OK,
+                   posts
+               )
+           }
+
+       }
+   }
 }
