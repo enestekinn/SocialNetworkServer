@@ -19,7 +19,7 @@ suspend fun PipelineContext<Unit, ApplicationCall>.ifEmailBelongsToUser(
         ,userId
     )
     if (isEmailByUser){
-        onSuccess
+        onSuccess()
     }else {
         call.respond(HttpStatusCode.Unauthorized)
     }

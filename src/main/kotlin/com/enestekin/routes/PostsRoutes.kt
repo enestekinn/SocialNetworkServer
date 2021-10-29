@@ -49,13 +49,16 @@ when we attached a claim  which is email.user logs in . email saves in token.
 //            }
 
                 // same *
+            println("${request.userId} %%%%% ${request.description}")
             ifEmailBelongsToUser(
                 userId = request.userId,
                 validateEmail = userService::doesEmailBelongToUserId
             ){
                 val didUserExist = postService.createPostIfUserExists(request)
+                println("$didUserExist %%%%% .........")
 
                 if (!didUserExist){
+                    println("$didUserExist false")
                     call.respond(
                         HttpStatusCode.OK,
                         BasicApiResponse(
@@ -82,7 +85,7 @@ fun Route.getPostsForFollows(
     userService: UserService
 ){
    authenticate {
-       get {
+       get ("/api/post/get"){
            val userId = call.parameters[QueryParams.PARAM_USER_ID] ?: kotlin.run {
                call.respond(HttpStatusCode.BadRequest)
                return@get
@@ -98,7 +101,7 @@ fun Route.getPostsForFollows(
                userId = userId,
                validateEmail = userService::doesEmailBelongToUserId
            ){
-
+               println("Calisti")
                val posts = postService.getPostsForFollows(userId,page,pageSize)
                call.respond(
                    HttpStatusCode.OK,

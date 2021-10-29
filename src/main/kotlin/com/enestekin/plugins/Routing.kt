@@ -1,6 +1,7 @@
 package com.enestekin.plugins
 
 import com.enestekin.routes.*
+import com.enestekin.service.CommentService
 import com.enestekin.service.FollowService
 import com.enestekin.service.LikeService
 import com.enestekin.service.UserService
@@ -12,12 +13,10 @@ import org.koin.ktor.ext.inject
 fun Application.configureRouting() {
 
     val userService: UserService by inject()
-
     val followService: FollowService by inject()
-
     val postService: PostService by inject()
-
     val likeService: LikeService by inject()
+    val commentService: CommentService by inject()
 
 
 
@@ -43,11 +42,17 @@ fun Application.configureRouting() {
         // Post routes
         createPost(postService,userService)
         getPostsForFollows(postService, userService)
-        deletePost(postService,userService)
+        deletePost(postService,userService,likeService)
 
         // Like routes
         likeParent(likeService,userService)
         unlikeParent(likeService, userService)
+
+        //Comment routes
+        createComment(commentService,userService)
+        deleteComment(commentService, userService, likeService)
+        getCommentsForPost(commentService, userService)
+
 
 
     }
