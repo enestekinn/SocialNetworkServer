@@ -7,4 +7,5 @@ import org.koin.dsl.module
 internal val testModule = module {
 
     single { FakeUserRepository() }
+
 }

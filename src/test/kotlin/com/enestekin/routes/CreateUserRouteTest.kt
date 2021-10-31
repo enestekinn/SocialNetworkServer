@@ -7,9 +7,9 @@ import com.enestekin.di.testModule
 import com.enestekin.plugins.configureSerialization
 import com.enestekin.data.repository.user.FakeUserRepository
 import com.enestekin.util.ApiResponseMessages
+
 import com.google.common.truth.Truth.assertThat
 import com.google.gson.Gson
-
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.routing.*
@@ -22,7 +22,6 @@ import org.koin.test.inject
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
-
 
 
 internal class CreateUserRouteTest : KoinTest {

@@ -6,6 +6,7 @@ import com.enestekin.data.responses.BasicApiResponse
 import com.enestekin.service.FollowService
 import com.enestekin.util.ApiResponseMessages.USER_NOT_FOUND
 import io.ktor.application.*
+import io.ktor.auth.*
 import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
@@ -13,6 +14,9 @@ import io.ktor.routing.*
 
 fun Route.followUser(followService: FollowService) {
 
+authenticate {
+
+}
 
 
 post("/api/following/follow"){
@@ -24,7 +28,7 @@ post("/api/following/follow"){
     }
 
 
-    val didUserExist =  followService.followUserIfExists(request)
+    val didUserExist =  followService.followUserIfExists(request,call.userId)
     if (didUserExist){
         call.respond(
             HttpStatusCode.OK,
@@ -45,7 +49,6 @@ post("/api/following/follow"){
 }
 
 
-
 }
 
 fun Route.unfollowUser(followService: FollowService){
@@ -57,7 +60,7 @@ fun Route.unfollowUser(followService: FollowService){
 
         }
 
-      val didUserExist =followService.unfollowUserIfExists(request)
+      val didUserExist =followService.unfollowUserIfExists(request,call.userId)
         if (didUserExist){
             call.respond(
                 HttpStatusCode.OK,

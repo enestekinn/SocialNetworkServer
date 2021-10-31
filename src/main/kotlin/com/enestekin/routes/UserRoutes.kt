@@ -2,8 +2,6 @@ package com.enestekin.routes
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import com.enestekin.data.repository.user.UserRepository
-import com.enestekin.data.models.User
 import com.enestekin.data.requests.CreateAccountRequest
 import com.enestekin.data.requests.LoginRequest
 import com.enestekin.data.responses.AuthResponse
@@ -18,7 +16,6 @@ import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import java.util.*
-import kotlin.math.exp
 
 fun Route.createUser(userService: UserService) {
 
@@ -28,8 +25,6 @@ fun Route.createUser(userService: UserService) {
 
 
         post {
-
-
 
             val request = call.receiveOrNull<CreateAccountRequest>() ?: kotlin.run {
                 call.respond(HttpStatusCode.BadRequest)
@@ -92,15 +87,26 @@ fun Route.loginUser(
                 return@post
             }
 
-
-
-         val isCorrectPassword = userService.doesPasswordMatchForUser(request)
+            val user = userService.getUserByEmail(request.email) ?: kotlin.run {
+                call.respond(
+                    HttpStatusCode.OK,
+                    BasicApiResponse(
+                        successful = false,
+                        message = INVALID_CREDENTIALS
+                    )
+                )
+                return@post
+            }
+         val isCorrectPassword = userService.isValidPassword(
+             enteredPassword = request.password,
+             actualPassword = user.password
+         )
 
             if (isCorrectPassword){
                 // when user is logged  in , produce token  and attached it to respond
                 val expiresIn = 1000L * 60L * 60L * 24L * 365L // one year
                 val token = JWT.create()
-                    .withClaim("email",request.email)
+                    .withClaim("userId",user.id)
                     .withIssuer(jwtIssuer)
                     .withExpiresAt(Date(System.currentTimeMillis() + expiresIn)) // token expires in a year
                     .withAudience(jwtAudience)

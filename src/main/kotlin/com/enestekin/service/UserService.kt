@@ -19,6 +19,13 @@ suspend fun doesUserWithEmailExist(email: String): Boolean {
         return repository.doesEmailBelongToUserId(email,userId)
     }
 
+    suspend fun getUserByEmail(email: String): User? {
+        return repository.getUserByEmail(email)
+    }
+    fun isValidPassword(enteredPassword: String, actualPassword: String): Boolean{
+        return  enteredPassword == actualPassword
+    }
+
     suspend fun doesPasswordMatchForUser(request: LoginRequest):Boolean{
         return repository.doesPasswordForUserMatch(
             email = request.email,

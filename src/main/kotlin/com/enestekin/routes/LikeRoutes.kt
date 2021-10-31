@@ -22,11 +22,8 @@ fun Route.likeParent(
                 call.respond(HttpStatusCode.BadRequest)
                 return@post
             }
-            ifEmailBelongsToUser(
-                userId = request.userId,
-                validateEmail = userService::doesEmailBelongToUserId
-            ){
-                val likeSuccessful  = likeService.likeParent(request.userId, request.parentId)
+
+                val likeSuccessful  = likeService.likeParent(call.userId, request.parentId)
                 if (likeSuccessful){
                     call.respond(HttpStatusCode.OK,
                     BasicApiResponse(
@@ -42,7 +39,7 @@ fun Route.likeParent(
                         )
                     )
                 }
-            }
+
         }
     }
 }
@@ -57,11 +54,8 @@ fun Route.unlikeParent(
                 call.respond(HttpStatusCode.BadRequest)
                 return@delete
             }
-            ifEmailBelongsToUser(
-                userId = request.userId,
-                validateEmail = userService::doesEmailBelongToUserId
-            ){
-                val unlikeSuccessful  = likeService.unlikeParent(request.userId, request.parentId)
+
+                val unlikeSuccessful  = likeService.unlikeParent(call.userId, request.parentId)
                 if (unlikeSuccessful){
                     call.respond(HttpStatusCode.OK,
                         BasicApiResponse(
@@ -80,4 +74,3 @@ fun Route.unlikeParent(
             }
         }
     }
-}
