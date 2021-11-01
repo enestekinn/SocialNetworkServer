@@ -1,5 +1,7 @@
 package com.enestekin.di
 
+import com.enestekin.data.repository.activity.ActivityRepository
+import com.enestekin.data.repository.activity.ActivityRepositoryImpl
 import com.enestekin.data.repository.comment.CommentRepository
 import com.enestekin.data.repository.comment.CommentRepositoryImpl
 import com.enestekin.data.repository.follow.FollowRepository
@@ -11,10 +13,7 @@ import com.enestekin.data.repository.post.PostRepositoryImpl
 import com.enestekin.data.repository.user.UserRepository
 import com.enestekin.data.repository.user.UserRepositoryImpl
 import com.enestekin.routes.PostService
-import com.enestekin.service.CommentService
-import com.enestekin.service.FollowService
-import com.enestekin.service.LikeService
-import com.enestekin.service.UserService
+import com.enestekin.service.*
 import com.enestekin.util.Constants
 import org.koin.dsl.module
 import org.litote.kmongo.coroutine.coroutine
@@ -48,12 +47,17 @@ val mainModule = module {
         CommentRepositoryImpl(get())
     }
 
+    single<ActivityRepository> {
+        ActivityRepositoryImpl(get())
+    }
+
 
     single { UserService(get()) }
     single { FollowService(get()) }
     single { PostService(get()) }
     single { LikeService(get()) }
     single { CommentService(get()) }
+    single { ActivityService(get(),get(),get()) }
 
 
 }
