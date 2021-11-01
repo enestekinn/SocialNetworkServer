@@ -4,6 +4,7 @@ package com.enestekin.routes
 import com.enestekin.data.requests.CreatePostRequest
 import com.enestekin.data.requests.DeletePostRequest
 import com.enestekin.data.responses.BasicApiResponse
+import com.enestekin.service.CommentService
 import com.enestekin.service.LikeService
 import com.enestekin.service.UserService
 import com.enestekin.util.ApiResponseMessages
@@ -87,7 +88,8 @@ fun Route.getPostsForFollows(
 
 fun Route.deletePost(
     postService: PostService,
-    likeService: LikeService
+    likeService: LikeService,
+    commentService: CommentService
 ) {
     authenticate {
     delete("/api/post/delete") {
@@ -110,7 +112,7 @@ fun Route.deletePost(
 
             postService.deletePost(request.postId)
             likeService.deleteLikesForParent(request.postId)
-            // TODO: 28.10.2021 Delete comments from post
+            commentService.deleteCommentsForPost(request.postId)
             call.respond(HttpStatusCode.OK)
         }else {
             call.respond(HttpStatusCode.Unauthorized)
