@@ -2,6 +2,7 @@ package com.enestekin.routes
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import com.enestekin.data.models.User
 import com.enestekin.data.requests.CreateAccountRequest
 import com.enestekin.data.requests.LoginRequest
 import com.enestekin.data.responses.AuthResponse
@@ -10,7 +11,9 @@ import com.enestekin.service.UserService
 import com.enestekin.util.ApiResponseMessages.FIELDS_BLANK
 import com.enestekin.util.ApiResponseMessages.INVALID_CREDENTIALS
 import com.enestekin.util.ApiResponseMessages.USER_ALREADY_EXISTS
+import com.enestekin.util.QueryParams
 import io.ktor.application.*
+import io.ktor.auth.*
 import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
@@ -124,6 +127,31 @@ fun Route.loginUser(
                     )
                 )
             }
+
+
+        }
+    }
+}
+
+fun Route.searchUser(userService: UserService){
+
+    authenticate {
+        get ("/api/user/search"){
+            val query = call.parameters[QueryParams.PARAM_QUERY]
+            if(query == null || query.isBlank()){
+                call.respond(
+                    HttpStatusCode.OK,
+                    listOf<User>()
+                )
+                return@get
+
+            }
+
+            val searchResults = userService.searchForUsers(query,call.userId)
+            call.respond(
+                HttpStatusCode.OK,
+                searchResults
+            )
 
 
         }
