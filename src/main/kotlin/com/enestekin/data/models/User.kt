@@ -1,5 +1,6 @@
 package com.enestekin.data.models
 
+import com.enestekin.data.responses.ProfileResponse
 import org.bson.codecs.pojo.annotations.BsonId
 import org.bson.types.ObjectId
 
@@ -14,6 +15,9 @@ data class User(
     val gitHubUrl: String?,
     val instagramUrl: String?,
     val linkedInUrl: String?,
+    val followerCount: Int = 0,
+    val followingCount: Int = 0,
+    val postCount: Int = 0,
     val skills: List<String> = listOf(), // empty list by default
     @BsonId
     val id: String = ObjectId().toString(),

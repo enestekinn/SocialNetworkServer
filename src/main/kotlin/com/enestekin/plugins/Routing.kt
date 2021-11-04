@@ -4,6 +4,7 @@ import com.enestekin.routes.*
 import com.enestekin.service.*
 import io.ktor.routing.*
 import io.ktor.application.*
+import io.ktor.http.content.*
 import org.koin.ktor.ext.inject
 
 
@@ -33,6 +34,9 @@ fun Application.configureRouting() {
             jwtSecret = jwtSecret
         )
         searchUser(userService)
+        getUserProfile(userService)
+        getPostForProfile(postService)
+        updateUserProfile(userService)
 
         // Following routes
         followUser(followService,activityService)
@@ -55,6 +59,12 @@ fun Application.configureRouting() {
         //Activity routes
         getActivities(activityService)
 
+
+
+        // we created directory in static folder so we implemeted  static fun here
+        static {
+            resources("static")
+        }
     }
 
 

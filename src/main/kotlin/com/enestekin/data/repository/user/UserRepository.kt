@@ -1,6 +1,7 @@
 package com.enestekin.data.repository.user
 
 import com.enestekin.data.models.User
+import com.enestekin.data.requests.UpdateProfileRequest
 
 interface UserRepository {
 
@@ -9,6 +10,12 @@ interface UserRepository {
     suspend fun getUserById(id: String): User?
 
     suspend fun getUserByEmail(email: String): User?
+
+    suspend fun updateUser(
+        userId: String,
+        profileImageUrl: String,
+        updateProfileRequest: UpdateProfileRequest
+    ): Boolean
 
     suspend fun doesPasswordForUserMatch(email: String, enteredPassword: String): Boolean
 
