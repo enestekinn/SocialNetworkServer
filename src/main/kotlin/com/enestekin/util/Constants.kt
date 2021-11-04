@@ -9,10 +9,12 @@ object Constants {
 
   const val MAX_COMMENT_LENGTH = 2000
 
-  const val BASE_URL = "http://localhost:8007/"
+  const val BASE_URL = "http://localhost:8008/"
 
 
-    // path must be start with build. by doing that static folder refreshing
+    // path must be start with build. by doing that static folder is  refreshing
   const val PROFILE_PICTURE_PATH = "build/resources/main/static/profile_pictures/"
+
+  const val POST_PICTURE_PATH = "build/resources/main/static/post_pictures/"
 
 }

@@ -7,55 +7,81 @@ import com.enestekin.data.responses.BasicApiResponse
 import com.enestekin.service.CommentService
 import com.enestekin.service.LikeService
 import com.enestekin.service.UserService
-import com.enestekin.util.ApiResponseMessages
 import com.enestekin.util.Constants
+import com.enestekin.util.Constants.POST_PICTURE_PATH
 import com.enestekin.util.QueryParams
+import com.enestekin.util.save
+import com.google.gson.Gson
 import io.ktor.application.*
 import io.ktor.auth.*
-import io.ktor.auth.jwt.*
 import io.ktor.http.*
+import io.ktor.http.content.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import org.koin.ktor.ext.inject
+import java.io.File
 
 fun Route.createPost(
-    postService: PostService,
+    postService: PostService
 ) {
 
+    val gson by inject<Gson>()
     authenticate {
         post("/api/post/create") {
-            val request = call.receiveOrNull<CreatePostRequest>() ?: kotlin.run {
+
+
+            val multipart = call.receiveMultipart()
+            var createPostRequest: CreatePostRequest? = null
+            var fileName: String? = null
+                multipart.forEachPart { partData ->
+
+                    when (partData) {
+                        is PartData.FormItem -> {
+
+                            //  using post_data  in postman
+                            if (partData.name == "post_data") {
+                                createPostRequest = gson.fromJson(
+                                    partData.value,
+                                    CreatePostRequest::class.java
+                                )
+                            }
+
+                        }
+                        is PartData.FileItem -> {
+                          fileName =  partData.save(POST_PICTURE_PATH)
+                        }
+                        is PartData.BinaryItem -> Unit
+                    }
+                }
+
+
+            val postPictureUrl = "${Constants.BASE_URL}post_pictures/$fileName"
+
+            createPostRequest?.let { request ->
+
+                val createPostAcknowledged = postService.createPost(
+                    request = request,
+                    userId = call.userId,
+                    imageUrl = postPictureUrl
+
+                )
+                if (createPostAcknowledged) {
+                    call.respond(
+                        HttpStatusCode.OK,
+                        BasicApiResponse(
+                            successful = true
+                        )
+                    )
+                } else {
+                    File("${POST_PICTURE_PATH}/$fileName").delete()
+                    call.respond(
+                        HttpStatusCode.InternalServerError
+                    )
+                }
+            } ?: kotlin.run {
                 call.respond(HttpStatusCode.BadRequest)
                 return@post
-
-            }
-/*
-when we attached a claim  which is email.user logs in . email saves in token.
- which user can't modifier.here we get that email from token
- *
- **/
-
-
-            val userId = call.userId
-
-            val didUserExist = postService.createPostIfUserExists(request,userId)
-
-            if (!didUserExist) {
-                println("$didUserExist false")
-                call.respond(
-                    HttpStatusCode.OK,
-                    BasicApiResponse(
-                        successful = false,
-                        message = ApiResponseMessages.USER_NOT_FOUND
-                    )
-                )
-            } else {
-                call.respond(
-                    HttpStatusCode.OK,
-                    BasicApiResponse(
-                        successful = true,
-                    )
-                )
             }
         }
 

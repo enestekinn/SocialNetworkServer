@@ -17,6 +17,7 @@ import com.enestekin.util.Constants
 import com.enestekin.util.Constants.BASE_URL
 import com.enestekin.util.Constants.PROFILE_PICTURE_PATH
 import com.enestekin.util.QueryParams
+import com.enestekin.util.save
 import com.google.gson.Gson
 import io.ktor.application.*
 import io.ktor.auth.*
@@ -252,10 +253,7 @@ fun Route.updateUserProfile(userService: UserService) {
 
                     }
                     is PartData.FileItem -> {
-                        val fileBytes = partData.streamProvider().readBytes()
-                        val fileExtension = partData.originalFileName?.takeLastWhile { it != '.' }
-                         fileName = UUID.randomUUID().toString()+ "." + fileExtension
-                        File("$PROFILE_PICTURE_PATH$fileName").writeBytes(fileBytes)
+                fileName =  partData.save(PROFILE_PICTURE_PATH)
                     }
                     is PartData.BinaryItem -> Unit
                 }
