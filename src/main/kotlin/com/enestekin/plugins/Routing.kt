@@ -50,6 +50,7 @@ fun Application.configureRouting() {
         // Like routes
         likeParent(likeService,activityService)
         unlikeParent(likeService, userService)
+        getLikesForParent(likeService)
 
         //Comment routes
         createComment(commentService,activityService)
@@ -61,7 +62,7 @@ fun Application.configureRouting() {
 
 
 
-        // we created directory in static folder so we implemeted  static fun here
+        // we created directory in static folder, so we implemented  static fun here
         static {
             resources("static")
         }

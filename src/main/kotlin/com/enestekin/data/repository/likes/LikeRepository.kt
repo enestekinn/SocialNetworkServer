@@ -1,5 +1,8 @@
 package com.enestekin.data.repository.likes
 
+import com.enestekin.data.models.Like
+import com.enestekin.util.Constants
+
 interface LikeRepository {
 
 
@@ -8,5 +11,11 @@ interface LikeRepository {
     suspend fun unlikeParent(userId: String, parentId: String): Boolean
 
     suspend fun deleteLikesForParent(parentId: String)
+
+    suspend fun getLikesForParent(
+        parentId: String,
+        page: Int = 0,
+        pageSize: Int = Constants.DEFAULT_ACTIVITY_PAGE_SIZE
+    ): List<Like>
 
 }

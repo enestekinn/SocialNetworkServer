@@ -1,6 +1,7 @@
 package com.enestekin.data.repository.likes
 
 import com.enestekin.data.models.Like
+import com.enestekin.data.models.Post
 import com.enestekin.data.models.User
 import com.enestekin.data.util.ParentType
 import org.litote.kmongo.and
@@ -18,7 +19,7 @@ class LikeRepositoryImpl(
 
                 val doesUserExist = users.findOneById(userId) != null
         return if (doesUserExist){
-            likes.insertOne(Like(userId,parentId,parentType))
+            likes.insertOne(Like(userId,parentId,parentType,System.currentTimeMillis()))
             true
         }else {
             false
@@ -43,5 +44,14 @@ Like::userId eq userId,
 
     override suspend fun deleteLikesForParent(parentId: String) {
         likes.deleteMany(Like::parentId eq parentId)
+    }
+
+    override suspend fun getLikesForParent(parentId: String,page: Int,pageSize: Int): List<Like> {
+        return likes
+            .find(Like::parentId eq parentId)
+            .skip(page * pageSize)
+            .limit(pageSize)
+            .descendingSort(Like::timeStamp)
+            .toList()
     }
 }

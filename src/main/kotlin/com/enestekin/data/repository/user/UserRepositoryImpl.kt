@@ -2,11 +2,8 @@ package com.enestekin.data.repository.user
 
 import com.enestekin.data.models.User
 import com.enestekin.data.requests.UpdateProfileRequest
-import org.litote.kmongo.MongoOperator
+import org.litote.kmongo.*
 import org.litote.kmongo.coroutine.CoroutineDatabase
-import org.litote.kmongo.eq
-import org.litote.kmongo.or
-import org.litote.kmongo.regex
 
 class UserRepositoryImpl(
    db: CoroutineDatabase
@@ -71,6 +68,10 @@ class UserRepositoryImpl(
         )
             .descendingSort(User::followerCount)
             .toList()
+    }
+
+    override suspend fun getUsers(userIds: List<String>): List<User> {
+                return      users.find(User::id  `in` userIds).toList()
     }
 
 }
