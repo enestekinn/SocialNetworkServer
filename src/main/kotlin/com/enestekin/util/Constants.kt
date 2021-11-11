@@ -9,7 +9,7 @@ object Constants {
 
   const val MAX_COMMENT_LENGTH = 2000
 
-  const val BASE_URL = "http://localhost:8008/"
+  const val BASE_URL = "http://localhost:8001/"
 
 
     // path must be start with build. by doing that static folder is  refreshing

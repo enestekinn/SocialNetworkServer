@@ -23,6 +23,7 @@ fun Application.configureRouting() {
     val jwtAudience = environment.config.property("jwt.audience").getString()
     val jwtSecret = environment.config.property("jwt.secret").getString()
 
+
     routing {
 
         // User routes

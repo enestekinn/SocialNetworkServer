@@ -6,7 +6,7 @@ import com.enestekin.data.requests.DeletePostRequest
 import com.enestekin.data.responses.BasicApiResponse
 import com.enestekin.service.CommentService
 import com.enestekin.service.LikeService
-import com.enestekin.service.UserService
+import com.enestekin.service.PostService
 import com.enestekin.util.Constants
 import com.enestekin.util.Constants.POST_PICTURE_PATH
 import com.enestekin.util.QueryParams
@@ -27,7 +27,9 @@ fun Route.createPost(
 ) {
 
     val gson by inject<Gson>()
+
     authenticate {
+
         post("/api/post/create") {
 
 
@@ -39,12 +41,15 @@ fun Route.createPost(
                     when (partData) {
                         is PartData.FormItem -> {
 
+                            println(partData.name)
                             //  using post_data  in postman
                             if (partData.name == "post_data") {
+
                                 createPostRequest = gson.fromJson(
                                     partData.value,
                                     CreatePostRequest::class.java
                                 )
+
                             }
 
                         }
@@ -58,6 +63,7 @@ fun Route.createPost(
 
             val postPictureUrl = "${Constants.BASE_URL}post_pictures/$fileName"
 
+
             createPostRequest?.let { request ->
 
                 val createPostAcknowledged = postService.createPost(
@@ -66,6 +72,7 @@ fun Route.createPost(
                     imageUrl = postPictureUrl
 
                 )
+                println(createPostAcknowledged)
                 if (createPostAcknowledged) {
                     call.respond(
                         HttpStatusCode.OK,

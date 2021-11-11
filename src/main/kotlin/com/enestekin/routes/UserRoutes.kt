@@ -8,6 +8,7 @@ import com.enestekin.data.requests.LoginRequest
 import com.enestekin.data.requests.UpdateProfileRequest
 import com.enestekin.data.responses.AuthResponse
 import com.enestekin.data.responses.BasicApiResponse
+import com.enestekin.service.PostService
 import com.enestekin.service.UserService
 import com.enestekin.util.ApiResponseMessages
 import com.enestekin.util.ApiResponseMessages.FIELDS_BLANK
@@ -22,12 +23,10 @@ import com.google.gson.Gson
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.http.*
-import io.ktor.http.ContentDisposition.Companion.File
 import io.ktor.http.content.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
-import io.netty.handler.codec.http.HttpResponse
 import org.koin.ktor.ext.inject
 import java.io.File
 import java.util.*

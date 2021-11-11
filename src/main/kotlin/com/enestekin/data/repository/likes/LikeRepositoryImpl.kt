@@ -3,7 +3,6 @@ package com.enestekin.data.repository.likes
 import com.enestekin.data.models.Like
 import com.enestekin.data.models.Post
 import com.enestekin.data.models.User
-import com.enestekin.data.util.ParentType
 import org.litote.kmongo.and
 import org.litote.kmongo.coroutine.CoroutineDatabase
 import org.litote.kmongo.eq

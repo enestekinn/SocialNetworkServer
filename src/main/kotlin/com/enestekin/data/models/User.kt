@@ -1,6 +1,5 @@
 package com.enestekin.data.models
 
-import com.enestekin.data.responses.ProfileResponse
 import org.bson.codecs.pojo.annotations.BsonId
 import org.bson.types.ObjectId
 

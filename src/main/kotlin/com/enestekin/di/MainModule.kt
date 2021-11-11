@@ -12,7 +12,7 @@ import com.enestekin.data.repository.post.PostRepository
 import com.enestekin.data.repository.post.PostRepositoryImpl
 import com.enestekin.data.repository.user.UserRepository
 import com.enestekin.data.repository.user.UserRepositoryImpl
-import com.enestekin.routes.PostService
+import com.enestekin.service.PostService
 import com.enestekin.service.*
 import com.enestekin.util.Constants
 import com.google.gson.Gson
