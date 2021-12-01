@@ -36,14 +36,14 @@ fun Route.likeParent(
 
                     )
                     call.respond(HttpStatusCode.OK,
-                    BasicApiResponse(
+                    BasicApiResponse<Unit>(
                         successful = true
                     )
                     )
                 }else {
                     call.respond(
                         HttpStatusCode.NotFound,
-                        BasicApiResponse(
+                        BasicApiResponse<Unit>(
                             successful = false,
                             message = ApiResponseMessages.USER_NOT_FOUND
                         )
@@ -68,14 +68,14 @@ fun Route.unlikeParent(
                 val unlikeSuccessful  = likeService.unlikeParent(call.userId, request.parentId)
                 if (unlikeSuccessful){
                     call.respond(HttpStatusCode.OK,
-                        BasicApiResponse(
+                        BasicApiResponse<Unit>(
                             successful = true
                         )
                     )
                 }else {
                     call.respond(
                         HttpStatusCode.NotFound,
-                        BasicApiResponse(
+                        BasicApiResponse<Unit>(
                             successful = false,
                             message = ApiResponseMessages.USER_NOT_FOUND
                         )

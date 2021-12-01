@@ -27,6 +27,7 @@ fun Application.configureRouting() {
     routing {
 
         // User routes
+        authenticate()
         createUser(userService)
         loginUser(
             userService = userService,

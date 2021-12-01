@@ -31,118 +31,7 @@ import org.koin.ktor.ext.inject
 import java.io.File
 import java.util.*
 
-fun Route.createUser(userService: UserService) {
 
-
-
-    route("/api/user/create") {
-
-
-        post {
-
-            val request = call.receiveOrNull<CreateAccountRequest>() ?: kotlin.run {
-                call.respond(HttpStatusCode.BadRequest)
-                return@post
-            }
-
-            if(userService.doesUserWithEmailExist(request.email)) {
-                call.respond(
-                    BasicApiResponse(
-                        successful = false,
-                        message = USER_ALREADY_EXISTS
-                    )
-                )
-                return@post
-            }
-            when(userService.validateCreateAccountRequest(request)){
-                is UserService.ValidationEvent.ErrorFieldEmpty -> {
-                    call.respond(
-                        BasicApiResponse(
-                            successful = false,
-                            message = FIELDS_BLANK
-                        )
-                    )
-                }
-                is UserService.ValidationEvent.Success -> {
-                    userService.createUser(request)
-                    call.respond(
-                        BasicApiResponse(successful = true)
-                    )
-            }
-
-            }
-
-        }
-    }
-}
-
-fun Route.loginUser(
-    userService: UserService,
-    jwtIssuer: String,
-    jwtAudience: String,
-    jwtSecret: String
-) {
-
-
-    //post("/api/user/login"){ }
-
-    route("/api/user/login") {
-
-
-        post {
-
-            val request = call.receiveOrNull<LoginRequest>() ?: kotlin.run {
-                call.respond(HttpStatusCode.BadRequest)
-                return@post
-            }
-
-            if (request.email.isBlank() && request.password.isBlank()){
-                call.respond(HttpStatusCode.BadRequest)
-                return@post
-            }
-
-            val user = userService.getUserByEmail(request.email) ?: kotlin.run {
-                call.respond(
-                    HttpStatusCode.OK,
-                    BasicApiResponse(
-                        successful = false,
-                        message = INVALID_CREDENTIALS
-                    )
-                )
-                return@post
-            }
-         val isCorrectPassword = userService.isValidPassword(
-             enteredPassword = request.password,
-             actualPassword = user.password
-         )
-
-            if (isCorrectPassword){
-                // when user is logged  in , produce token  and attached it to respond
-                val expiresIn = 1000L * 60L * 60L * 24L * 365L // one year
-                val token = JWT.create()
-                    .withClaim("userId",user.id)
-                    .withIssuer(jwtIssuer)
-                    .withExpiresAt(Date(System.currentTimeMillis() + expiresIn)) // token expires in a year
-                    .withAudience(jwtAudience)
-                    .sign(Algorithm.HMAC256(jwtSecret))
-                call.respond(
-                    HttpStatusCode.OK,
-                  AuthResponse(token = token)
-                )
-            }else {
-                call.respond(
-                    HttpStatusCode.OK,
-                    BasicApiResponse(
-                        successful = false,
-                        message = INVALID_CREDENTIALS
-                    )
-                )
-            }
-
-
-        }
-    }
-}
 
 fun Route.searchUser(userService: UserService){
 
@@ -209,7 +98,7 @@ fun Route.getUserProfile(userService: UserService){
 
             val profileResponse = userService.getUserProfile(userId, call.userId)
             if (profileResponse == null){
-                call.respond(HttpStatusCode.OK,BasicApiResponse(
+                call.respond(HttpStatusCode.OK,BasicApiResponse<Unit>(
                     successful = false,
                     message = ApiResponseMessages.USER_NOT_FOUND
                 )
@@ -271,7 +160,7 @@ fun Route.updateUserProfile(userService: UserService) {
                 if (updateAcknowledged) {
                     call.respond(
                         HttpStatusCode.OK,
-                        BasicApiResponse(
+                        BasicApiResponse<Unit>(
                             successful = true
                         )
                     )
