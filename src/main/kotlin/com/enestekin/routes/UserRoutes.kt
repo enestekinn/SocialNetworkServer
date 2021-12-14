@@ -1,20 +1,13 @@
 package com.enestekin.routes
 
-import com.auth0.jwt.JWT
-import com.auth0.jwt.algorithms.Algorithm
-import com.enestekin.data.models.User
-import com.enestekin.data.requests.CreateAccountRequest
-import com.enestekin.data.requests.LoginRequest
 import com.enestekin.data.requests.UpdateProfileRequest
-import com.enestekin.data.responses.AuthResponse
 import com.enestekin.data.responses.BasicApiResponse
+import com.enestekin.data.responses.UserResponseItem
 import com.enestekin.service.PostService
 import com.enestekin.service.UserService
 import com.enestekin.util.ApiResponseMessages
-import com.enestekin.util.ApiResponseMessages.FIELDS_BLANK
-import com.enestekin.util.ApiResponseMessages.INVALID_CREDENTIALS
-import com.enestekin.util.ApiResponseMessages.USER_ALREADY_EXISTS
 import com.enestekin.util.Constants
+import com.enestekin.util.Constants.BANNER_IMAGE_PATH
 import com.enestekin.util.Constants.BASE_URL
 import com.enestekin.util.Constants.PROFILE_PICTURE_PATH
 import com.enestekin.util.QueryParams
@@ -29,25 +22,23 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import org.koin.ktor.ext.inject
 import java.io.File
-import java.util.*
 
 
-
-fun Route.searchUser(userService: UserService){
+fun Route.searchUser(userService: UserService) {
 
     authenticate {
-        get ("/api/user/search"){
+        get("/api/user/search") {
             val query = call.parameters[QueryParams.PARAM_QUERY]
-            if(query == null || query.isBlank()){
+            if (query == null || query.isBlank()) {
                 call.respond(
                     HttpStatusCode.OK,
-                    listOf<User>()
+                    listOf<UserResponseItem>()
                 )
                 return@get
 
             }
 
-            val searchResults = userService.searchForUsers(query,call.userId)
+            val searchResults = userService.searchForUsers(query, call.userId)
             call.respond(
                 HttpStatusCode.OK,
                 searchResults
@@ -64,14 +55,14 @@ fun Route.getPostForProfile(
     authenticate {
         get("/api/user/posts") {
 
-
+            val userId = call.parameters[QueryParams.PARAM_USER_ID]
             val page = call.parameters[QueryParams.PARAM_PAGE]?.toIntOrNull() ?: 0
             val pageSize =
                 call.parameters[QueryParams.PARAM_PAGE_SIZE]?.toIntOrNull() ?: Constants.DEFAULT_POST_PAGE_SIZE
 
 
             val posts = postService.getPostsForProfile(
-                userId = call.userId,
+                userId = userId ?: call.userId,
                 page = page,
                 pageSize = pageSize
 
@@ -85,30 +76,38 @@ fun Route.getPostForProfile(
     }
 }
 
-fun Route.getUserProfile(userService: UserService){
+fun Route.getUserProfile(userService: UserService) {
 
     authenticate {
-        get ("/api/user/profile"){
-            val userId = call.parameters[QueryParams.PARAM_USERID]
-            if(userId == null || userId.isBlank()){
+        get("/api/user/profile") {
+
+            val userId = call.parameters[QueryParams.PARAM_USER_ID]
+            println("userId: $userId UserRoutes")
+            if (userId == null || userId.isBlank()) {
                 call.respond(HttpStatusCode.BadRequest)
                 return@get
 
             }
-
+            println("profileResponse")
             val profileResponse = userService.getUserProfile(userId, call.userId)
-            if (profileResponse == null){
-                call.respond(HttpStatusCode.OK,BasicApiResponse<Unit>(
-                    successful = false,
-                    message = ApiResponseMessages.USER_NOT_FOUND
-                )
+            println("profileResponse: $profileResponse UserRoutes")
+
+            if (profileResponse == null) {
+                call.respond(
+                    HttpStatusCode.OK, BasicApiResponse<Unit>(
+                        successful = false,
+                        message = ApiResponseMessages.USER_NOT_FOUND
+                    )
                 )
                 return@get
 
             }
             call.respond(
                 HttpStatusCode.OK,
-                profileResponse
+                BasicApiResponse(
+                    successful = true,
+                    data = profileResponse
+                )
             )
 
 
@@ -126,14 +125,15 @@ fun Route.updateUserProfile(userService: UserService) {
 
             val multipart = call.receiveMultipart()
             var updateProfileRequest: UpdateProfileRequest? = null
-            var fileName: String? = null
+            var profilePictureFileName: String? = null
+            var bannerImageFileName: String? = null
 
             multipart.forEachPart { partData ->
 
                 when (partData) {
                     is PartData.FormItem -> {
                         if (partData.name == "update_profile_data") {
-                             updateProfileRequest = gson.fromJson<UpdateProfileRequest>(
+                            updateProfileRequest = gson.fromJson<UpdateProfileRequest>(
                                 partData.value,
                                 UpdateProfileRequest::class.java
                             )
@@ -141,21 +141,39 @@ fun Route.updateUserProfile(userService: UserService) {
 
                     }
                     is PartData.FileItem -> {
-                fileName =  partData.save(PROFILE_PICTURE_PATH)
+                        if (partData.name == "profile_picture") {
+
+                            profilePictureFileName = partData.save(PROFILE_PICTURE_PATH)
+
+                        } else if (partData.name == "banner_image") {
+
+                            bannerImageFileName = partData.save(BANNER_IMAGE_PATH)
+
+                        }
                     }
                     is PartData.BinaryItem -> Unit
                 }
             }
 
 
-            val profilePictureUrl = "${BASE_URL}profile_pictures/$fileName"
+            val profilePictureUrl = "${BASE_URL}profile_pictures/$profilePictureFileName"
+            val bannerImageUrl = "${BASE_URL}banner_images/$bannerImageFileName"
 
             updateProfileRequest?.let { request ->
 
                 val updateAcknowledged = userService.updateUser(
                     userId = call.userId,
-                    profileImageUrl =  profilePictureUrl,
-                    updateProfileRequest = request
+                    profileImageUrl = if (profilePictureFileName == null) {
+                        null
+                    } else {
+                        profilePictureUrl
+                    },
+                    bannerUrl = if (bannerImageFileName == null) {
+                        null
+                    } else {
+                        bannerImageUrl
+                    },
+                    updateProfileRequest = request,
                 )
                 if (updateAcknowledged) {
                     call.respond(
@@ -165,7 +183,7 @@ fun Route.updateUserProfile(userService: UserService) {
                         )
                     )
                 } else {
-                    File("${PROFILE_PICTURE_PATH}/$fileName").delete()
+                    File("${PROFILE_PICTURE_PATH}/$profilePictureFileName").delete()
                     call.respond(
                         HttpStatusCode.InternalServerError
                     )

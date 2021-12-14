@@ -11,17 +11,28 @@ class UserRepositoryImpl(
 
     private val users = db.getCollection<User>()
 
+
     override suspend fun createUser(user: User) {
+        println(users)
       users.insertOne(user)
     }
 
     override suspend fun getUserById(id: String): User? {
-        return users.findOneById(id)
+        // bir hata var
+        println("Enes")
+
+        val user =users.findOneById(id)
+        println("getUserById: $user UserRepositoryImpl")
+        return user
+
     }
 
     override suspend fun getUserByEmail(email: String): User? {
-        return users.findOne(User::email eq email) //eq equal
+
+     return users.findOne(User::email eq email) //eq equal
     }
+
+
 
     override suspend fun doesPasswordForUserMatch(email: String, enteredPassword: String): Boolean {
         val user = getUserByEmail(email)
@@ -30,7 +41,8 @@ class UserRepositoryImpl(
 
     override suspend fun updateUser(
         userId: String,
-        profileImageUrl: String,
+        profileImageUrl: String?,
+        bannerUrl: String?,
         updateProfileRequest: UpdateProfileRequest
     ): Boolean {
 
@@ -41,7 +53,8 @@ class UserRepositoryImpl(
             email = user.email,
             username = updateProfileRequest.username,
             password = user.password,
-            profileImageUrl = profileImageUrl,
+            profileImageUrl = profileImageUrl ?: user.profileImageUrl,
+                bannerUrl = bannerUrl ?: user.bannerUrl,
                 bio = updateProfileRequest.bio,
                 gitHubUrl = updateProfileRequest.gitHubUrl,
                 instagramUrl =  updateProfileRequest.instagramUrl,

@@ -29,7 +29,6 @@ fun Route.createUser(userService: UserService) {
                 call.respond(HttpStatusCode.BadRequest)
                 return@post
             }
-
             if(userService.doesUserWithEmailExist(request.email)) {
                 call.respond(
                     BasicApiResponse<Unit>(
@@ -39,6 +38,7 @@ fun Route.createUser(userService: UserService) {
                 )
                 return@post
             }
+
             when(userService.validateCreateAccountRequest(request)){
                 is UserService.ValidationEvent.ErrorFieldEmpty -> {
                     call.respond(
@@ -49,6 +49,7 @@ fun Route.createUser(userService: UserService) {
                     )
                 }
                 is UserService.ValidationEvent.Success -> {
+                    println("ValidationEvent is Success")
                     userService.createUser(request)
                     call.respond(
                         BasicApiResponse<Unit>(successful = true)
@@ -56,6 +57,8 @@ fun Route.createUser(userService: UserService) {
                 }
 
             }
+
+
 
         }
     }

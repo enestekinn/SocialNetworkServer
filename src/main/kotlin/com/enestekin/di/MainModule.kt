@@ -10,6 +10,8 @@ import com.enestekin.data.repository.likes.LikeRepository
 import com.enestekin.data.repository.likes.LikeRepositoryImpl
 import com.enestekin.data.repository.post.PostRepository
 import com.enestekin.data.repository.post.PostRepositoryImpl
+import com.enestekin.data.repository.skill.SkillRepository
+import com.enestekin.data.repository.skill.SkillRepositoryImpl
 import com.enestekin.data.repository.user.UserRepository
 import com.enestekin.data.repository.user.UserRepositoryImpl
 import com.enestekin.service.PostService
@@ -24,9 +26,10 @@ import org.litote.kmongo.reactivestreams.KMongo
 val mainModule = module {
 
     single {
-
+        println("Okundu")
         val client = KMongo.createClient().coroutine
         client.getDatabase(Constants.DATABASE_NAME)
+
 
 
     }
@@ -52,6 +55,10 @@ val mainModule = module {
         ActivityRepositoryImpl(get())
     }
 
+    single<SkillRepository> {
+        SkillRepositoryImpl(get())
+    }
+
 
     single { UserService(get(),get()) }
     single { FollowService(get()) }
@@ -59,6 +66,7 @@ val mainModule = module {
     single { LikeService(get(),get(),get()) }
     single { CommentService(get()) }
     single { ActivityService(get(),get(),get()) }
+    single { SkillService(get()) }
 
     single { Gson() }
 

@@ -16,6 +16,7 @@ fun Application.configureRouting() {
     val likeService: LikeService by inject()
     val commentService: CommentService by inject()
     val activityService: ActivityService by inject()
+    val skillService: SkillService by inject()
 
 
 
@@ -62,6 +63,8 @@ fun Application.configureRouting() {
         //Activity routes
         getActivities(activityService)
 
+        // Skill routes
+        getSkills(skillService)
 
 
         // we created directory in static folder, so we implemented  static fun here
