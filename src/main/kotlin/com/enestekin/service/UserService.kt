@@ -32,7 +32,7 @@ suspend fun getUserProfile(userId: String,callerUserId: String): ProfileResponse
             postCount =user. postCount,
             profilePictureUrl = user.profileImageUrl,
         bannerUrl = user.bannerUrl,
-            topSkills = user.skills.map { it.toSkillResponse() },
+            topSkills = user.skills,
             gitHubUrl = user.gitHubUrl ?: "",
             instagramUrl = user.instagramUrl ?: "",
             linkedInUrl = user.linkedInUrl ?: "",
@@ -82,7 +82,6 @@ suspend fun  searchForUsers(query: String,userId: String): List<UserResponseItem
 
 
     suspend fun createUser(request: CreateAccountRequest) {
-        println("createUser Calisti")
         userRepository.createUser(
             User(
                 email = request.email,

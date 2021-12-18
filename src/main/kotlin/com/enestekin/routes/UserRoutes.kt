@@ -56,6 +56,7 @@ fun Route.getPostForProfile(
         get("/api/user/posts") {
 
             val userId = call.parameters[QueryParams.PARAM_USER_ID]
+            println("/api/user/posts : userId $userId")
             val page = call.parameters[QueryParams.PARAM_PAGE]?.toIntOrNull() ?: 0
             val pageSize =
                 call.parameters[QueryParams.PARAM_PAGE_SIZE]?.toIntOrNull() ?: Constants.DEFAULT_POST_PAGE_SIZE
@@ -76,44 +77,7 @@ fun Route.getPostForProfile(
     }
 }
 
-fun Route.getUserProfile(userService: UserService) {
 
-    authenticate {
-        get("/api/user/profile") {
-
-            val userId = call.parameters[QueryParams.PARAM_USER_ID]
-            println("userId: $userId UserRoutes")
-            if (userId == null || userId.isBlank()) {
-                call.respond(HttpStatusCode.BadRequest)
-                return@get
-
-            }
-            println("profileResponse")
-            val profileResponse = userService.getUserProfile(userId, call.userId)
-            println("profileResponse: $profileResponse UserRoutes")
-
-            if (profileResponse == null) {
-                call.respond(
-                    HttpStatusCode.OK, BasicApiResponse<Unit>(
-                        successful = false,
-                        message = ApiResponseMessages.USER_NOT_FOUND
-                    )
-                )
-                return@get
-
-            }
-            call.respond(
-                HttpStatusCode.OK,
-                BasicApiResponse(
-                    successful = true,
-                    data = profileResponse
-                )
-            )
-
-
-        }
-    }
-}
 
 fun Route.updateUserProfile(userService: UserService) {
 

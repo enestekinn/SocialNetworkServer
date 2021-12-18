@@ -13,7 +13,7 @@ class UserRepositoryImpl(
 
 
     override suspend fun createUser(user: User) {
-        println(users)
+
       users.insertOne(user)
     }
 

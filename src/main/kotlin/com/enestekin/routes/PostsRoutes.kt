@@ -7,6 +7,8 @@ import com.enestekin.data.responses.BasicApiResponse
 import com.enestekin.service.CommentService
 import com.enestekin.service.LikeService
 import com.enestekin.service.PostService
+import com.enestekin.service.UserService
+import com.enestekin.util.ApiResponseMessages
 import com.enestekin.util.Constants
 import com.enestekin.util.Constants.POST_PICTURE_PATH
 import com.enestekin.util.QueryParams
@@ -94,7 +96,44 @@ fun Route.createPost(
 
     }
 }
+fun Route.getUserProfile(userService: UserService) {
 
+    authenticate {
+        get("/api/user/profile") {
+
+            val userId = call.parameters[QueryParams.PARAM_USER_ID]
+            println("userId: $userId UserRoutes")
+            if (userId == null || userId.isBlank()) {
+                call.respond(HttpStatusCode.BadRequest)
+                return@get
+
+            }
+            println("profileResponse")
+            val profileResponse = userService.getUserProfile(userId, call.userId)
+            println("profileResponse: $profileResponse UserRoutes")
+
+            if (profileResponse == null) {
+                call.respond(
+                    HttpStatusCode.OK, BasicApiResponse<Unit>(
+                        successful = false,
+                        message = ApiResponseMessages.USER_NOT_FOUND
+                    )
+                )
+                return@get
+
+            }
+            call.respond(
+                HttpStatusCode.OK,
+                BasicApiResponse(
+                    successful = true,
+                    data = profileResponse
+                )
+            )
+
+
+        }
+    }
+}
 
 fun Route.getPostsForFollows(
     postService: PostService,

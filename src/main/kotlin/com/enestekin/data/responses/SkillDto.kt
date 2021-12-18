@@ -1,6 +1,6 @@
 package com.enestekin.data.responses
 
-data class SkillResponse(
+data class SkillDto(
     val name: String,
     val imageUrl: String
 )

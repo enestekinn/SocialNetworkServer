@@ -1,5 +1,7 @@
 package com.enestekin.di
 
+import com.enestekin.data.models.Post
+import com.enestekin.data.models.Skill
 import com.enestekin.data.repository.activity.ActivityRepository
 import com.enestekin.data.repository.activity.ActivityRepositoryImpl
 import com.enestekin.data.repository.comment.CommentRepository
@@ -18,6 +20,8 @@ import com.enestekin.service.PostService
 import com.enestekin.service.*
 import com.enestekin.util.Constants
 import com.google.gson.Gson
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.koin.dsl.module
 import org.litote.kmongo.coroutine.coroutine
 import org.litote.kmongo.reactivestreams.KMongo
@@ -26,9 +30,9 @@ import org.litote.kmongo.reactivestreams.KMongo
 val mainModule = module {
 
     single {
-        println("Okundu")
         val client = KMongo.createClient().coroutine
         client.getDatabase(Constants.DATABASE_NAME)
+
 
 
 

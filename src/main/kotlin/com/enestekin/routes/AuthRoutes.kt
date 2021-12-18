@@ -117,7 +117,9 @@ fun Route.loginUser(
                     HttpStatusCode.OK,
                     BasicApiResponse(
                         successful = true,
-                        data = AuthResponse(token = token)
+                        data = AuthResponse(
+                            userId = user.id,
+                            token = token)
                     )
                 )
             }else {
@@ -138,7 +140,10 @@ fun Route.loginUser(
 fun Route.authenticate() {
 
     authenticate {
+
         get("/api/user/authenticate"){
+            println("authenticate: ${this.context.userId}")
+
         call.respond(HttpStatusCode.OK)
         }
     }

@@ -1,6 +1,6 @@
 package com.enestekin.data.models
 
-import com.enestekin.data.responses.SkillResponse
+import com.enestekin.data.responses.SkillDto
 import org.bson.codecs.pojo.annotations.BsonId
 import org.bson.types.ObjectId
 
@@ -11,8 +11,8 @@ data class Skill(
     val imageUrl: String
 
 ){
-     fun toSkillResponse(): SkillResponse {
-         return SkillResponse(
+     fun toSkillDto(): SkillDto {
+         return SkillDto(
              name = name,
              imageUrl = imageUrl
          )
