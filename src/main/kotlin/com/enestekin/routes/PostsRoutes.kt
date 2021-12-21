@@ -165,34 +165,53 @@ fun Route.deletePost(
     commentService: CommentService
 ) {
     authenticate {
-    delete("/api/post/delete") {
-        val request = call.receiveOrNull<DeletePostRequest>() ?: kotlin.run {
-            call.respond(HttpStatusCode.BadRequest)
-            return@delete
+        delete("/api/post/delete") {
+            val request = call.receiveOrNull<DeletePostRequest>() ?: kotlin.run {
+                call.respond(HttpStatusCode.BadRequest)
+                return@delete
+
+            }
+
+            val post = postService.getPost(request.postId)
+
+
+            if (post == null) {
+                call.respond(
+                    HttpStatusCode.NotFound
+                )
+                return@delete
+            }
+            if (post.userId == call.userId) {
+
+                postService.deletePost(request.postId)
+                likeService.deleteLikesForParent(request.postId)
+                commentService.deleteCommentsForPost(request.postId)
+                call.respond(HttpStatusCode.OK)
+            } else {
+                call.respond(HttpStatusCode.Unauthorized)
+            }
 
         }
-
-        val post = postService.getPost(request.postId)
-
-
-        if (post == null) {
-            call.respond(
-                HttpStatusCode.NotFound
-            )
-            return@delete
-        }
-        if (post.userId == call.userId){
-
-            postService.deletePost(request.postId)
-            likeService.deleteLikesForParent(request.postId)
-            commentService.deleteCommentsForPost(request.postId)
-            call.respond(HttpStatusCode.OK)
-        }else {
-            call.respond(HttpStatusCode.Unauthorized)
-        }
-
     }
-    }
-
-
 }
+    fun Route.getPostDetails(postService: PostService){
+        authenticate {
+            get("/api/post/details"){
+                val postId = call.parameters["postId"] ?: kotlin.run {
+                    call.respond(HttpStatusCode.BadRequest)
+                    return@get
+                }
+                val post = postService.getPost(postId) ?: kotlin.run {
+                    call.respond(HttpStatusCode.NotFound)
+                    return@get
+                }
+                call.respond(
+                    HttpStatusCode.OK,
+                    BasicApiResponse(
+                        successful = true,
+                        data = post
+                    )
+                )
+            }
+        }
+    }

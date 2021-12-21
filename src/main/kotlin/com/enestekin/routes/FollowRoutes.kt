@@ -8,6 +8,7 @@ import com.enestekin.data.util.ActivityType
 import com.enestekin.service.ActivityService
 import com.enestekin.service.FollowService
 import com.enestekin.util.ApiResponseMessages.USER_NOT_FOUND
+import com.enestekin.util.QueryParams
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.http.*
@@ -65,30 +66,33 @@ fun Route.followUser(
 }
 
 fun Route.unfollowUser(followService: FollowService) {
-    delete("/api/following/unfollow") {
 
-        val request = call.receiveOrNull<FollowUpdateRequest>() ?: kotlin.run {
-            call.respond(HttpStatusCode.BadRequest)
-            return@delete
+    authenticate {
+        delete("/api/following/unfollow") {
 
-        }
+            val userId = call.parameters[QueryParams.PARAM_USER_ID] ?: kotlin.run {
+                call.respond(HttpStatusCode.BadRequest)
+                return@delete
 
-        val didUserExist = followService.unfollowUserIfExists(request, call.userId)
-        if (didUserExist) {
-            call.respond(
-                HttpStatusCode.OK,
-                BasicApiResponse<Unit>(
-                    successful = true
+            }
+
+            val didUserExist = followService.unfollowUserIfExists(userId, call.userId)
+            if (didUserExist) {
+                call.respond(
+                    HttpStatusCode.OK,
+                    BasicApiResponse<Unit>(
+                        successful = true
+                    )
                 )
-            )
-        } else {
-            call.respond(
-                HttpStatusCode.OK,
-                BasicApiResponse<Unit>(
-                    successful = false,
-                    message = USER_NOT_FOUND
+            } else {
+                call.respond(
+                    HttpStatusCode.OK,
+                    BasicApiResponse<Unit>(
+                        successful = false,
+                        message = USER_NOT_FOUND
+                    )
                 )
-            )
+            }
         }
     }
 }

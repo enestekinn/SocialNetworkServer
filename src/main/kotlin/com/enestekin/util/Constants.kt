@@ -11,7 +11,7 @@ object Constants {
 
   // const val BASE_URL = "http://192.168.0.102:8001/"
 
-  const val BASE_URL = "http://192.168.1.9:8001/"
+  const val BASE_URL = "http://192.168.1.3:8001/"
 
 
  //  const val BASE_URL = "http://localhost:8001/"

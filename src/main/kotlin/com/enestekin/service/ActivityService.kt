@@ -4,6 +4,7 @@ import com.enestekin.data.models.Activity
 import com.enestekin.data.repository.activity.ActivityRepository
 import com.enestekin.data.repository.comment.CommentRepository
 import com.enestekin.data.repository.post.PostRepository
+import com.enestekin.data.responses.ActivityResponse
 import com.enestekin.data.util.ActivityType
 import com.enestekin.data.util.ParentType
 import com.enestekin.util.Constants.DEFAULT_ACTIVITY_PAGE_SIZE
@@ -18,7 +19,7 @@ class ActivityService(
         userId: String,
         page: Int = 0,
         pageSize: Int = DEFAULT_ACTIVITY_PAGE_SIZE
-    ): List<Activity> {
+    ): List<ActivityResponse> {
         return activityRepository.getActivitiesForUser(userId, page, pageSize)
     }
 

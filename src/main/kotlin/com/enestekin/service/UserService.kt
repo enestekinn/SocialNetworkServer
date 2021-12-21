@@ -76,7 +76,7 @@ suspend fun  searchForUsers(query: String,userId: String): List<UserResponseItem
         isFollowing = isFollowing
     )
 
-    }
+    }.filter { it.userId != userId } //  remove ownProfile in list
 
 }
 
