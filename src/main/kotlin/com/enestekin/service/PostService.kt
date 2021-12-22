@@ -3,6 +3,7 @@ package com.enestekin.service
 import com.enestekin.data.models.Post
 import com.enestekin.data.repository.post.PostRepository
 import com.enestekin.data.requests.CreatePostRequest
+import com.enestekin.data.responses.PostResponse
 import com.enestekin.util.Constants
 
 class PostService (
@@ -40,7 +41,14 @@ class PostService (
     ): List<Post> {
         return repository.getPostsForProfile(userId, page, pageSize)
     }
-    suspend fun getPost(postId: String): Post? = repository.getPost(postId)
+    suspend fun getPost(
+        postId: String
+    ): Post? {
+        return repository.getPost(postId)
+    }
+    suspend fun getPostDetails(ownUserId: String,postId: String): PostResponse? {
+        return repository.getPostDetails(ownUserId,postId)
+    }
 
     suspend fun deletePost(postId: String){
         repository.deletePost(postId)

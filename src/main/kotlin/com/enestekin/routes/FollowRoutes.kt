@@ -1,7 +1,6 @@
 package com.enestekin.routes
 
 import com.enestekin.data.models.Activity
-import com.enestekin.data.repository.follow.FollowRepository
 import com.enestekin.data.requests.FollowUpdateRequest
 import com.enestekin.data.responses.BasicApiResponse
 import com.enestekin.data.util.ActivityType

@@ -1,8 +1,10 @@
 package com.enestekin.data.repository.post
 
 import com.enestekin.data.models.Following
+import com.enestekin.data.models.Like
 import com.enestekin.data.models.Post
 import com.enestekin.data.models.User
+import com.enestekin.data.responses.PostResponse
 import com.enestekin.util.Constants
 import org.litote.kmongo.`in`
 import org.litote.kmongo.coroutine.CoroutineDatabase
@@ -16,6 +18,7 @@ class PostRepositoryImpl(
     private val posts = db.getCollection<Post>()
     private val following = db.getCollection<Following>()
     private val users = db.getCollection<User>()
+    private val likes = db.getCollection<Like>()
 
     override suspend fun createPost(post: Post): Boolean {
         return posts.insertOne(post).wasAcknowledged()
@@ -35,10 +38,11 @@ class PostRepositoryImpl(
             .toList()
             .map {
                 it.followedUserId
-        }
+            }
 
         return posts.find(
-            Post::userId `in` userIdsFromFollows)
+            Post::userId `in` userIdsFromFollows
+        )
             .skip(page * pageSize) // skip first  15  elements
             .limit(pageSize)
             .descendingSort(Post::timestamp)
@@ -57,5 +61,22 @@ class PostRepositoryImpl(
 
     override suspend fun getPost(postId: String): Post? {
         return posts.findOneById(postId)
+    }
+
+    override suspend fun getPostDetails(userId: String, postId: String): PostResponse? {
+        val isLiked = likes.findOne(Like::userId eq userId) != null
+        val post = posts.findOneById(postId) ?: return null
+        val user = users.findOneById(userId) ?: return null
+        return PostResponse(
+            id = post.id,
+            userId = user.id,
+            username = user.username,
+            imageUrl = post.imageUrl,
+            profilePictureUrl = user.profileImageUrl,
+            description = post.description,
+            likeCount = post.likeCount,
+            commentCount = post.commentCount,
+            isLiked = isLiked
+        )
     }
 }
