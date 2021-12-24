@@ -102,7 +102,6 @@ fun Route.getUserProfile(userService: UserService) {
         get("/api/user/profile") {
 
             val userId = call.parameters[QueryParams.PARAM_USER_ID]
-            println("userId: $userId UserRoutes")
             if (userId == null || userId.isBlank()) {
                 call.respond(HttpStatusCode.BadRequest)
                 return@get

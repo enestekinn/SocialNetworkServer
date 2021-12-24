@@ -56,13 +56,12 @@ fun Route.getPostForProfile(
         get("/api/user/posts") {
 
             val userId = call.parameters[QueryParams.PARAM_USER_ID]
-            println("/api/user/posts : userId $userId")
             val page = call.parameters[QueryParams.PARAM_PAGE]?.toIntOrNull() ?: 0
-            val pageSize =
-                call.parameters[QueryParams.PARAM_PAGE_SIZE]?.toIntOrNull() ?: Constants.DEFAULT_POST_PAGE_SIZE
+            val pageSize = call.parameters[QueryParams.PARAM_PAGE_SIZE]?.toIntOrNull() ?: Constants.DEFAULT_POST_PAGE_SIZE
 
 
             val posts = postService.getPostsForProfile(
+                ownUserId = call.userId,
                 userId = userId ?: call.userId,
                 page = page,
                 pageSize = pageSize
