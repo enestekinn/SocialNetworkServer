@@ -190,7 +190,6 @@ fun Route.deletePost(
     }
 }
     fun Route.getPostDetails(postService: PostService){
-        authenticate {
             get("/api/post/details"){
                 val postId = call.parameters["postId"] ?: kotlin.run {
                     call.respond(HttpStatusCode.BadRequest)
@@ -207,6 +206,5 @@ fun Route.deletePost(
                         data = post
                     )
                 )
-            }
         }
     }
