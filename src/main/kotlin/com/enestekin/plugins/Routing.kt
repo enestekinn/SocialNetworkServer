@@ -68,6 +68,7 @@ fun Application.configureRouting() {
         getSkills(skillService)
 
 
+        // provide everything in static folder
         // we created directory in static folder, so we implemented  static fun here
         static {
             resources("static")

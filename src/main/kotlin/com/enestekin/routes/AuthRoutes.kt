@@ -49,7 +49,6 @@ fun Route.createUser(userService: UserService) {
                     )
                 }
                 is UserService.ValidationEvent.Success -> {
-                    println("ValidationEvent is Success")
                     userService.createUser(request)
                     call.respond(
                         BasicApiResponse<Unit>(successful = true)
@@ -142,7 +141,6 @@ fun Route.authenticate() {
     authenticate {
 
         get("/api/user/authenticate"){
-            println("authenticate: ${this.context.userId}")
 
         call.respond(HttpStatusCode.OK)
         }

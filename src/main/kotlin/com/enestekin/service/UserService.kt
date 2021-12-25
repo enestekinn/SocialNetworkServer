@@ -7,6 +7,7 @@ import com.enestekin.data.requests.CreateAccountRequest
 import com.enestekin.data.requests.UpdateProfileRequest
 import com.enestekin.data.responses.ProfileResponse
 import com.enestekin.data.responses.UserResponseItem
+import com.enestekin.util.Constants
 
 
 // this class is basically like viewmodel
@@ -16,7 +17,6 @@ class UserService(
 ) {
 
 suspend fun doesUserWithEmailExist(email: String): Boolean {
-    println(email)
         return userRepository.getUserByEmail(email) != null
     }
 
@@ -87,9 +87,9 @@ suspend fun  searchForUsers(query: String,userId: String): List<UserResponseItem
                 email = request.email,
                 username = request.username,
                 password = request.password,
-                profileImageUrl = "",
+                profileImageUrl =Constants.DEFAULT_PROFILE_PICTURE_PATH,
                 bio = "",
-                bannerUrl= "",
+                bannerUrl= Constants.DEFAULT_BANNER_IMAGE_PATH,
                 gitHubUrl = null,
                 instagramUrl = null,
                 linkedInUrl = null

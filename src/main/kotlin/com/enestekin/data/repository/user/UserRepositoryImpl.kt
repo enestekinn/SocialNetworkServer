@@ -18,11 +18,8 @@ class UserRepositoryImpl(
     }
 
     override suspend fun getUserById(id: String): User? {
-        // bir hata var
-        println("Enes")
 
         val user =users.findOneById(id)
-        println("getUserById: $user UserRepositoryImpl")
         return user
 
     }

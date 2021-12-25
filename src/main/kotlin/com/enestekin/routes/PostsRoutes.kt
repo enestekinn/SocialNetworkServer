@@ -43,7 +43,6 @@ fun Route.createPost(
                     when (partData) {
                         is PartData.FormItem -> {
 
-                            println(partData.name)
                             //  using post_data  in postman
                             if (partData.name == "post_data") {
 
@@ -74,7 +73,6 @@ fun Route.createPost(
                     imageUrl = postPictureUrl
 
                 )
-                println(createPostAcknowledged)
                 if (createPostAcknowledged) {
                     call.respond(
                         HttpStatusCode.OK,
@@ -107,9 +105,7 @@ fun Route.getUserProfile(userService: UserService) {
                 return@get
 
             }
-            println("profileResponse")
             val profileResponse = userService.getUserProfile(userId, call.userId)
-            println("profileResponse: $profileResponse UserRoutes")
 
             if (profileResponse == null) {
                 call.respond(
@@ -137,6 +133,7 @@ fun Route.getUserProfile(userService: UserService) {
 fun Route.getPostsForFollows(
     postService: PostService,
 ) {
+
     authenticate {
         get("/api/post/get") {
 
@@ -144,7 +141,6 @@ fun Route.getPostsForFollows(
             val page = call.parameters[QueryParams.PARAM_PAGE]?.toIntOrNull() ?: 0
             val pageSize =
                 call.parameters[QueryParams.PARAM_PAGE_SIZE]?.toIntOrNull() ?: Constants.DEFAULT_POST_PAGE_SIZE
-
 
             val posts = postService.getPostsForFollows(call.userId, page, pageSize)
             call.respond(
